@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Отчет об актуальности внутренних документов предприятия</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='10' fill='%231F5F7E'/%3E%3Crect x='14' y='10' width='8' height='28' rx='3' fill='%23fff'/%3E%3Crect x='26' y='18' width='8' height='20' rx='3' fill='%23BFD9E6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#F2F5F7;--surface:#FFFFFF;--line:#DCE3E8;--line2:#ECF0F3;--head:#F7F9FB;
+  --ink:#1D2A33;--muted:#5F6E78;
+  --accent:#1F5F7E;--accent-ink:#174A63;--accent-soft:#E4EEF3;
+  --ok:#2E7D32;--ok-bg:#E8F5E9;
+  --warn:#ED8C00;--warn-ink:#9A5A00;--warn-bg:#FFF4E5;
+  --bad:#D32F2F;--bad-bg:#FDECEA;
+  --off:#757575;--off-bg:#F1F1F1;
+  --draft:#2F6FB2;--draft-bg:#E8F0FA;
+  font-family:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:calc(56px + env(safe-area-inset-top,0px))}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1440px;margin:0 auto;padding:0 24px}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+
+/* header */
+.top{background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:18px;padding-top:16px;padding-bottom:16px;flex-wrap:wrap}
+.logo{width:56px;height:56px;flex:none;display:grid;place-items:center}
+.logo img{max-width:56px;max-height:56px;object-fit:contain}
+.brand{flex:1;min-width:260px}
+.brand .company{font-size:13px;color:var(--muted);margin:0 0 2px}
+.brand h1{margin:0;font-size:24px;line-height:1.2;font-weight:600;letter-spacing:-.01em}
+.user{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.user .who{text-align:right;font-size:13px;line-height:1.3}
+.user .who b{display:block;font-weight:600}
+.role-admin{color:var(--accent);font-weight:600}
+
+nav.sec{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:saturate(1.2) blur(6px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:#fff}
+nav.sec .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:0;padding-bottom:0}
+nav.sec a{display:block;padding:14px 12px;text-decoration:none;color:var(--muted);font-weight:500;white-space:nowrap;border-bottom:2px solid transparent}
+nav.sec a:hover{color:var(--ink);border-bottom-color:var(--line)}
+nav.sec .admin-only a{color:var(--accent)}
+
+main{padding:24px 0 80px}
+section.part{margin-bottom:28px}
+.part-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px;flex-wrap:wrap}
+.part-head h2{margin:0;font-size:19px;font-weight:600}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+.pad{padding:18px 20px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;padding:7px 13px;border-radius:6px;cursor:pointer;font-weight:500;white-space:nowrap}
+.btn:hover{border-color:#B9C6CF;background:#FAFBFC}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-ink);border-color:var(--accent-ink)}
+.btn-danger{color:var(--bad);border-color:#F1C4C4}
+.btn-danger:hover{background:var(--bad-bg)}
+.btn-sm{padding:4px 9px;font-size:12.5px}
+.btn-link{border:0;background:none;padding:0;color:var(--accent);cursor:pointer;text-decoration:underline;font-weight:500}
+.btn svg{width:16px;height:16px}
+
+/* KPI strip + timeline (hero) */
+.hero{overflow:hidden}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;padding:18px 20px 6px}
+.hero-top h2{margin:0;font-size:19px;font-weight:600}
+.hero-top p{margin:2px 0 0}
+.kpis{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:14px}
+.kpi{background:none;border:0;border-right:1px solid var(--line2);padding:12px 16px;text-align:left;cursor:pointer}
+.kpi:last-child{border-right:0}
+.kpi:hover{background:#FAFBFC}
+.kpi .v{display:block;font-size:26px;font-weight:600;line-height:1.1}
+.kpi .l{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.kpi.k-over{background:var(--bad-bg)}
+.kpi.k-over .v{color:var(--bad)}
+.kpi.k-exp .v{color:var(--warn-ink)}
+.kpi.k-ok .v{color:var(--ok)}
+.kpi.k-pct .v{color:var(--accent)}
+.tl-wrap{overflow-x:auto;padding:8px 12px 4px}
+.tl{display:block;min-width:820px;width:100%;height:auto}
+.tl text{font-family:inherit}
+.tl-tick{font-size:11px;fill:#7B8A94}
+.tl-row{font-size:12.5px;fill:var(--ink)}
+.tl-dot{cursor:pointer;transition:r .12s}
+.tl-dot:hover{r:8}
+.legend{display:flex;gap:16px;flex-wrap:wrap;padding:6px 20px 16px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.legend .zone{width:14px;height:10px;border-radius:2px}
+
+/* charts grid */
+.charts{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:16px}
+.c4{grid-column:span 4}.c5{grid-column:span 5}.c7{grid-column:span 7}.c6{grid-column:span 6}.c8{grid-column:span 8}
+.chart h3{margin:0 0 2px;font-size:15px;font-weight:600}
+.chart .sub{margin:0 0 14px;font-size:12.5px;color:var(--muted)}
+.donut-box{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.donut circle.seg{cursor:pointer}
+.donut circle.seg:hover{stroke-width:24}
+.dlist{list-style:none;margin:0;padding:0;display:grid;gap:6px;flex:1;min-width:170px}
+.dlist button{all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:12px;width:100%;padding:3px 4px;border-radius:4px}
+.dlist button:hover{background:var(--head)}
+.dlist button:focus-visible{outline:2px solid var(--accent)}
+.dlist i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
+.stack-row{display:grid;grid-template-columns:minmax(120px,190px) 1fr 34px;align-items:center;gap:10px;margin-bottom:8px;font-size:13px}
+.stack{display:flex;height:16px;border-radius:3px;overflow:hidden;background:var(--line2)}
+.stack button{border:0;padding:0;height:100%;cursor:pointer;min-width:3px}
+.stack button:hover{filter:brightness(.9)}
+.hbar-row{display:grid;grid-template-columns:minmax(110px,160px) 1fr 28px;gap:10px;align-items:center;margin-bottom:8px;font-size:13px}
+.hbar-row button{all:unset;cursor:pointer;display:contents}
+.hbar{height:14px;background:var(--line2);border-radius:3px;overflow:hidden}
+.hbar span{display:block;height:100%;background:var(--bad);border-radius:3px}
+.hbar-row b{color:var(--bad);text-align:right}
+.cols{display:flex;align-items:flex-end;gap:6px;height:160px;padding-top:18px;border-bottom:1px solid var(--line)}
+.cols button{flex:1;border:0;background:none;padding:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;cursor:pointer;gap:3px}
+.cols .bar{width:100%;max-width:34px;background:#9FC2D4;border-radius:3px 3px 0 0;min-height:2px}
+.cols button:first-child .bar{background:var(--warn)}
+.cols button:hover .bar{background:var(--accent)}
+.cols .n{font-size:12px;font-weight:600}
+.cols-l{display:flex;gap:6px;font-size:11px;color:var(--muted);margin-top:4px}
+.cols-l span{flex:1;text-align:center}
+.top10{margin:0;padding-left:22px}
+.top10 li{padding:6px 0;border-bottom:1px solid var(--line2)}
+.top10 li:last-child{border-bottom:0}
+.top10 button{all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:12px;width:100%}
+.top10 button:hover .t{text-decoration:underline}
+.top10 .od{white-space:nowrap}
+.empty-chart{color:var(--muted);padding:24px 0}
+
+/* registry */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;padding:16px 20px;border-bottom:1px solid var(--line)}
+.field{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+.field input,.field select,.field textarea{border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:#fff;color:var(--ink);font-size:14px;min-width:0}
+.field textarea{min-height:70px;resize:vertical}
+.toolbar .search{flex:1;min-width:220px}
+.toolbar .actions{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding:10px 20px 0;align-items:center;min-height:0}
+.chips:empty{display:none}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent-ink);border-radius:999px;padding:3px 6px 3px 11px;font-size:12.5px}
+.chip button{border:0;background:none;cursor:pointer;color:inherit;font-size:15px;line-height:1;padding:0 4px;border-radius:50%}
+.chip button:hover{background:rgba(31,95,126,.15)}
+.count{padding:10px 20px;font-size:12.5px;color:var(--muted)}
+.tbl-wrap{overflow:auto;max-height:72vh;border-top:1px solid var(--line2)}
+table{border-collapse:collapse;width:100%}
+.tbl th{position:sticky;top:0;z-index:2;background:var(--head);text-align:left;font-weight:600;font-size:12.5px;color:var(--muted);padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl th.sortable{cursor:pointer;user-select:none}
+.tbl th.sortable:hover{color:var(--ink)}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--line2);vertical-align:top}
+.tbl tbody tr{cursor:pointer}
+.tbl tbody tr:hover td{background:#F5F9FB}
+.tbl tr.row-over td{background:var(--bad-bg)}
+.tbl tr.row-over:hover td{background:#FADCD9}
+.tbl tr.row-draft td{background:#F7FAFE}
+.tbl td.num{text-align:right;white-space:nowrap}
+.tbl td.date{white-space:nowrap}
+.tbl td.title{min-width:260px;max-width:420px}
+.od{color:var(--bad);font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 8px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.b-active{background:var(--ok-bg);color:var(--ok)}
+.b-exp{background:var(--warn-bg);color:var(--warn-ink)}
+.b-exp::before{background:var(--warn)}
+.b-over{background:var(--bad-bg);color:var(--bad);font-weight:600}
+.b-off{background:var(--off-bg);color:var(--off)}
+.b-draft{background:var(--draft-bg);color:var(--draft)}
+.pdf-link{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:4px;padding:1px 7px;font-size:12px;background:#fff;cursor:pointer;color:var(--accent);font-weight:600}
+.pdf-link:hover{border-color:var(--accent)}
+.empty{padding:40px 20px;text-align:center;color:var(--muted)}
+
+/* responsible */
+.resp-tbl td,.resp-tbl th{padding:10px 14px;border-bottom:1px solid var(--line2);text-align:left}
+.resp-tbl th{font-size:12.5px;color:var(--muted);font-weight:600;background:var(--head)}
+.resp-tbl td.n{text-align:right}
+.resp-tbl tr:last-child td{border-bottom:0}
+
+/* admin */
+.admin-only{display:none!important}
+body.is-admin .admin-only{display:revert!important}
+body.is-admin .btn.admin-only,body.is-admin .admin-flex.admin-only{display:inline-flex!important}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);padding:0 12px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:12px 12px;cursor:pointer;color:var(--muted);font-weight:500;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabs .cnt{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--draft-bg);color:var(--draft);font-size:11.5px;margin-left:4px;text-align:center}
+.admin-body{padding:18px 20px}
+.admin-body h3{margin:0 0 4px;font-size:15px;font-weight:600}
+.admin-body .sub{margin:0 0 12px;color:var(--muted);font-size:12.5px}
+.simple{width:100%;border-collapse:collapse}
+.simple th,.simple td{padding:7px 8px;border-bottom:1px solid var(--line2);text-align:left;vertical-align:middle}
+.simple th{font-size:12.5px;color:var(--muted);font-weight:600;background:var(--head)}
+.simple input[type=text],.simple input[type=email],.simple select{width:100%;border:1px solid var(--line);border-radius:5px;padding:5px 8px;background:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}
+.form-grid .full{grid-column:1/-1}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink)}
+.letter{border:1px solid var(--line);border-radius:6px;margin-bottom:10px;background:#fff}
+.letter summary{padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.letter pre{margin:0;padding:12px 14px;border-top:1px solid var(--line2);white-space:pre-wrap;font-family:inherit;font-size:13px;background:var(--head)}
+.note{background:var(--accent-soft);color:var(--accent-ink);border-radius:6px;padding:10px 14px;font-size:13px}
+.note.warn{background:var(--warn-bg);color:var(--warn-ink)}
+.spacer{height:16px}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(29,42,51,.38);z-index:50;display:none;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow:auto}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:10px;width:100%;max-width:880px;border:1px solid var(--line)}
+.modal.wide{max-width:1180px}
+.modal-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line2)}
+.modal-h h2{margin:0;font-size:18px;font-weight:600}
+.modal-b{padding:18px 22px}
+.modal-f{display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid var(--line2);flex-wrap:wrap}
+.x{border:0;background:none;font-size:24px;line-height:1;cursor:pointer;color:var(--muted);padding:0 4px}
+dl.props{display:grid;grid-template-columns:220px 1fr;gap:8px 16px;margin:0}
+dl.props dt{color:var(--muted)}
+dl.props dd{margin:0}
+.verify{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pdf-ph{border:1px dashed #B9C6CF;border-radius:8px;background:var(--head);min-height:420px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;color:var(--muted)}
+.pdf-ph .sheet{width:150px;height:200px;background:#fff;border:1px solid var(--line);margin-bottom:14px;padding:14px 12px;display:flex;flex-direction:column;gap:6px}
+.pdf-ph .sheet i{display:block;height:5px;background:var(--line2);border-radius:2px}
+.pdf-frame{width:100%;height:65vh;border:1px solid var(--line);border-radius:6px;background:var(--head)}
+.conf{font-size:11.5px;padding:1px 6px;border-radius:4px;margin-left:6px}
+.conf.high{background:var(--ok-bg);color:var(--ok)}
+.conf.medium{background:var(--warn-bg);color:var(--warn-ink)}
+.conf.low{background:var(--bad-bg);color:var(--bad)}
+.form-err{color:var(--bad);font-size:13px;margin-top:10px}
+.calc{background:var(--accent-soft);border-radius:6px;padding:8px 12px;font-size:13px;color:var(--accent-ink)}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:6px;z-index:80;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+
+/* chat */
+.chat-btn{position:fixed;right:22px;bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:12px 18px 12px 14px;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(31,95,126,.28)}
+.chat-btn svg{width:20px;height:20px}
+.chat{position:fixed;right:22px;bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:45;width:400px;max-width:calc(100vw - 24px);height:560px;max-height:calc(100vh - 40px);background:#fff;border:1px solid var(--line);border-radius:12px;display:none;flex-direction:column;box-shadow:0 14px 40px rgba(29,42,51,.18)}
+.chat.open{display:flex}
+.chat-h{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line2)}
+.chat-h b{display:block}
+.chat-h span{font-size:12px;color:var(--muted)}
+.chat-m{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:9px 12px;border-radius:10px;font-size:13.5px;line-height:1.45}
+.msg.bot{background:var(--head);border:1px solid var(--line2);align-self:flex-start}
+.msg.me{background:var(--accent);color:#fff;align-self:flex-end}
+.msg ul{margin:6px 0 0;padding-left:18px}
+.msg .btn-link{font-size:13px}
+.sugg{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px}
+.sugg button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 10px;font-size:12.5px;cursor:pointer}
+.sugg button:hover{border-color:var(--accent);color:var(--accent)}
+.chat-f{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line2)}
+.chat-f input{flex:1;border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+.typing{color:var(--muted);font-size:12.5px}
+
+footer{border-top:1px solid var(--line);padding:18px 0;color:var(--muted);font-size:12.5px;background:#fff}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+#printArea{display:none}
+
+@media (max-width:1100px){
+  .kpis{grid-template-columns:repeat(4,1fr)}
+  .kpi{border-bottom:1px solid var(--line2)}
+  .c4,.c5,.c7,.c6,.c8{grid-column:span 12}
+}
+@media (max-width:760px){
+  .wrap{padding:0 14px}
+  .brand h1{font-size:19px}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .grid2,.verify,.form-grid{grid-template-columns:1fr}
+  dl.props{grid-template-columns:1fr}
+  dl.props dt{margin-top:6px}
+  .user .who{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+@media print{
+  @page{size:A4 landscape;margin:10mm}
+  body{background:#fff;font-size:10.5px;padding:0}
+  body>*:not(#printArea){display:none!important}
+  body::before{display:none}
+  #printArea{display:block}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .p-head{display:flex;gap:14px;align-items:center;border-bottom:2px solid #1F5F7E;padding-bottom:8px;margin-bottom:8px}
+  .p-head img,.p-head svg{width:44px;height:44px}
+  .p-head h1{font-size:17px;margin:0}
+  .p-meta{font-size:10px;color:#444;margin:4px 0 8px}
+  .p-sum{display:flex;gap:18px;margin:6px 0 10px;font-size:11px}
+  .p-tbl{width:100%;border-collapse:collapse}
+  .p-tbl thead{display:table-header-group}
+  .p-tbl th,.p-tbl td{border:1px solid #C9D2D8;padding:3px 5px;text-align:left;vertical-align:top}
+  .p-tbl th{background:#E4EEF3}
+  .p-tbl tr{page-break-inside:avoid}
+  .p-tbl tr.over td{background:#FDECEA}
+  .p-tbl .od{color:#D32F2F;font-weight:700}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="logo" id="logo"></div>
+    <div class="brand">
+      <p class="company" id="companyName"></p>
+      <h1>Отчет об актуальности внутренних документов предприятия</h1>
+    </div>
+    <div class="user" id="userBox"></div>
+  </div>
+</header>
+
+<nav class="sec" aria-label="Разделы страницы">
+  <div class="wrap">
+    <a href="#dashboard">Дашборд</a>
+    <a href="#registry">Реестр документов</a>
+    <a href="#responsible">Ответственные</a>
+    <span class="admin-only"><a href="#admin">Управление</a></span>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section class="part" id="dashboard">
+    <div class="panel hero">
+      <div class="hero-top">
+        <div>
+          <h2>Сроки действия документов</h2>
+          <p class="muted small" id="heroMeta"></p>
+        </div>
+        <button class="btn btn-sm" onclick="resetFilters(true)">Показать весь реестр</button>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <div class="tl-wrap" id="timeline"></div>
+      <div class="legend">
+        <span><i style="background:#2E7D32"></i>Действует</span>
+        <span><i style="background:#ED8C00"></i>Истекает в ближайшие <span class="warnDaysTxt">30</span> дней</span>
+        <span><i style="background:#D32F2F"></i>Просрочен</span>
+        <span><i class="zone" style="background:#FDECEA;border:1px solid #F3C1BD"></i>Зона просрочки</span>
+        <span>Каждая точка — дата окончания действия документа. Нажмите на точку, чтобы открыть карточку.</span>
+      </div>
+    </div>
+
+    <div class="charts">
+      <div class="panel pad chart c4">
+        <h3>Статусы документов</h3>
+        <p class="sub">Доля актуальных — от документов, подлежащих контролю</p>
+        <div id="chDonut"></div>
+      </div>
+      <div class="panel pad chart c8">
+        <h3>Статусы по разделам</h3>
+        <p class="sub">Нажмите на отрезок, чтобы отфильтровать реестр</p>
+        <div id="chStack"></div>
+      </div>
+      <div class="panel pad chart c6">
+        <h3>Окончание действия по месяцам</h3>
+        <p class="sub">Сколько документов нужно актуализировать в ближайшие 12 месяцев</p>
+        <div id="chMonths"></div>
+      </div>
+      <div class="panel pad chart c6">
+        <h3>Динамика просроченных документов</h3>
+        <p class="sub">Количество на конец каждого месяца, по текущим данным реестра</p>
+        <div id="chHistory"></div>
+      </div>
+      <div class="panel pad chart c5">
+        <h3>Просрочка по ответственным</h3>
+        <p class="sub">Ответственные за разделы</p>
+        <div id="chResp"></div>
+      </div>
+      <div class="panel pad chart c7">
+        <h3>Наибольшая просрочка</h3>
+        <p class="sub">Десять документов, просроченных дольше всего</p>
+        <div id="chTop"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="registry">
+    <div class="part-head">
+      <h2>Реестр внутренних документов</h2>
+      <span class="muted small" id="syncInfo"></span>
+    </div>
+    <div class="panel">
+      <div class="toolbar">
+        <label class="field search">Поиск
+          <input id="fq" type="search" placeholder="Обозначение, наименование, ФИО" oninput="F.q=this.value;renderRegistry()">
+        </label>
+        <label class="field">Раздел
+          <select id="fsec" onchange="F.section=this.value;renderRegistry()"></select>
+        </label>
+        <label class="field">Ответственный
+          <select id="fresp" onchange="F.resp=this.value;renderRegistry()"></select>
+        </label>
+        <label class="field">Статус
+          <select id="fstatus" onchange="F.status=this.value;renderRegistry()"></select>
+        </label>
+        <label class="field">Окончание в месяце
+          <input id="fmonth" type="month" onchange="F.month=this.value;renderRegistry()">
+        </label>
+        <div class="actions">
+          <button class="btn" onclick="exportXlsx()">Выгрузить в Excel</button>
+          <button class="btn" onclick="exportPdf()">Выгрузить в PDF</button>
+          <button class="btn admin-only" onclick="syncNow()">Синхронизировать</button>
+          <button class="btn btn-primary admin-only" onclick="editDoc()">Добавить документ</button>
+        </div>
+      </div>
+      <div class="chips" id="chips"></div>
+      <div class="count" id="count"></div>
+      <div class="tbl-wrap">
+        <table class="tbl" id="tbl"><thead></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="responsible">
+    <div class="part-head">
+      <h2>Ответственные за разделы</h2>
+    </div>
+    <div class="panel" style="overflow-x:auto">
+      <table class="resp-tbl" style="width:100%;border-collapse:collapse" id="respTbl"></table>
+    </div>
+  </section>
+
+  <section class="part admin-only" id="admin">
+    <div class="part-head">
+      <h2>Управление отчетом</h2>
+      <span class="muted small">Доступно только администратору</span>
+    </div>
+    <div class="panel">
+      <div class="tabs" role="tablist" id="adminTabs"></div>
+      <div class="admin-body" id="adminBody"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Администратор сайта: Васькина Т.Г., <a href="mailto:t.vaskina@pnhz.kz">t.vaskina@pnhz.kz</a></span>
+    <span>Демонстрационная версия: данные условные и хранятся в этом браузере</span>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"></div>
+</div>
+
+<button class="chat-btn" id="chatBtn" onclick="toggleChat(true)" aria-label="Открыть ИИ-помощника">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
+  ИИ-помощник
+</button>
+<div class="chat" id="chat" role="dialog" aria-label="ИИ-помощник">
+  <div class="chat-h">
+    <div><b>ИИ-помощник</b><span id="chatMode"></span></div>
+    <button class="x" onclick="toggleChat(false)" aria-label="Закрыть">×</button>
+  </div>
+  <div class="chat-m" id="chatMsgs"></div>
+  <div class="sugg" id="chatSugg"></div>
+  <form class="chat-f" onsubmit="event.preventDefault();chatSend()">
+    <input id="chatIn" type="text" placeholder="Спросите о документах или сроках" autocomplete="off">
+    <button class="btn btn-primary" type="submit">Отправить</button>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="printArea"></div>
+
+<script>
+'use strict';
+/* ====== Константы ====== */
+const ADMIN_EMAIL='t.vaskina@pnhz.kz';
+const STORE_KEY='vnd-actuality-demo-v1';
+const ST={
+  active:{l:'Действует',c:'b-active'},
+  expiring:{l:'Истекает',c:'b-exp'},
+  overdue:{l:'Просрочен',c:'b-over'},
+  cancelled:{l:'Отменен',c:'b-off'},
+  draft:{l:'Требует заполнения',c:'b-draft'}
+};
+const ORDER=['overdue','expiring','active','cancelled','draft'];
+const RANK={overdue:0,expiring:1,active:2,draft:3,cancelled:4};
+const SC={active:'#2E7D32',expiring:'#ED8C00',overdue:'#D32F2F',cancelled:'#B0B0B0',draft:'#2F6FB2'};
+const MON=['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'];
+const MON_P=['январе','феврале','марте','апреле','мае','июне','июле','августе','сентябре','октябре','ноябре','декабре'];
+const MON_S=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+const DEFAULT_LOGO='<svg viewBox="0 0 48 48" width="52" height="52" role="img" aria-label="Логотип предприятия"><rect width="48" height="48" rx="10" fill="#1F5F7E"/><rect x="14" y="9" width="8" height="29" rx="3" fill="#fff"/><path d="M14 16h8M14 22h8M14 28h8" stroke="#1F5F7E" stroke-width="1.6"/><rect x="26" y="18" width="8" height="20" rx="3" fill="#BFD9E6"/><rect x="10" y="38" width="28" height="2.6" rx="1.2" fill="#fff"/></svg>';
+const DEFAULT_COLUMNS=[
+  {key:'num',label:'№'},
+  {key:'code',label:'Обозначение'},
+  {key:'title',label:'Наименование документа'},
+  {key:'section',label:'Раздел'},
+  {key:'sectionResp',label:'Ответственный за раздел'},
+  {key:'developer',label:'Ответственный за разработку'},
+  {key:'effective',label:'Дата введения в действие'},
+  {key:'expiry',label:'Дата окончания действия'},
+  {key:'cancelled',label:'Дата отмены'},
+  {key:'left',label:'Осталось дней'},
+  {key:'overdue',label:'Дни просрочки'},
+  {key:'status',label:'Статус'},
+  {key:'file',label:'PDF'},
+  {key:'email',label:'Email ответственного',visible:false},
+  {key:'note',label:'Примечание',visible:false}
+];
+
+/* ====== Состояние ====== */
+let S;
+let F={q:'',section:'',resp:'',status:'',month:''};
+let SORT={key:'overdue',dir:-1};
+let adminTab='queue';
+let EDIT=null;
+let CHAT=[];
+
+/* ====== Утилиты ====== */
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function xe(v){return String(v??'').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function pad(n){return String(n).padStart(2,'0')}
+function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function todayISO(){return iso(new Date())}
+function parse(s){if(!s)return null;const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
+function fmt(s){if(!s)return '';const [y,m,d]=s.split('-');return d+'.'+m+'.'+y}
+function fmtTs(ts){const d=new Date(ts);return pad(d.getDate())+'.'+pad(d.getMonth()+1)+'.'+d.getFullYear()+' '+pad(d.getHours())+':'+pad(d.getMinutes())}
+function diffDays(a,b){return Math.round((Date.UTC(b.getFullYear(),b.getMonth(),b.getDate())-Date.UTC(a.getFullYear(),a.getMonth(),a.getDate()))/86400000)}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function addYears(s,n){const d=parse(s);const y=d.getFullYear()+n,m=d.getMonth();let day=d.getDate();const last=new Date(y,m+1,0).getDate();if(day>last)day=last;return iso(new Date(y,m,day))}
+function plural(n,a,b,c){const m10=n%10,m100=n%100;if(m10===1&&m100!==11)return a;if(m10>=2&&m10<=4&&(m100<10||m100>=20))return b;return c}
+function rng(seed){return()=>{seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296}}
+function uid(p){return p+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36)}
+function isAdmin(){return S.session.role==='admin'}
+function userName(){return isAdmin()?'Васькина Т.Г.':(S.session.email||'Читатель')}
+function stLabel(s){return s==='draft'&&!isAdmin()?'Данные уточняются':ST[s].l}
+function badge(s){return `<span class="badge ${ST[s].c}">${esc(stLabel(s))}</span>`}
+function fileHref(p){return p?encodeURI('file:'+p.replace(/\\/g,'/')):'#'}
+function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),2800)}
+function reduced(){return window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches}
+function audit(action,details,docId){S.audit.unshift({ts:new Date().toISOString(),user:isAdmin()?ADMIN_EMAIL:(S.session.email||'читатель'),action,details,docId:docId||''});if(S.audit.length>2000)S.audit.length=2000}
+
+/* ====== Демо-данные ====== */
+function seed(){
+  const r=rng(20261016);
+  const emp=[
+    ['e1','Ахметова Г.С.','Начальник отдела охраны труда','g.akhmetova@pnhz.kz'],
+    ['e2','Ким В.А.','Главный специалист по промышленной безопасности','v.kim@pnhz.kz'],
+    ['e3','Нурланова А.Б.','Начальник отдела менеджмента качества','a.nurlanova@pnhz.kz'],
+    ['e4','Сериков Е.М.','Начальник производственно-технического отдела','e.serikov@pnhz.kz'],
+    ['e5','Петренко О.Н.','Начальник отдела охраны окружающей среды','o.petrenko@pnhz.kz'],
+    ['e6','Жумабаева Д.К.','Начальник отдела управления персоналом','d.zhumabaeva@pnhz.kz'],
+    ['e7','Ибраев Р.Т.','Главный энергетик','r.ibraev@pnhz.kz'],
+    ['e8','Смагулов А.Е.','Ведущий инженер по охране труда','a.smagulov@pnhz.kz'],
+    ['e9','Лебедева И.В.','Ведущий инженер-технолог','i.lebedeva@pnhz.kz'],
+    ['e10','Оспанов Б.Ж.','Инженер по качеству','b.ospanov@pnhz.kz'],
+    ['e11','Васькина Т.Г.','Ответственный за реестр внутренних документов',ADMIN_EMAIL]
+  ].map(([id,name,position,email])=>({id,name,position,email}));
+  const root='\\\\pnhz-fs01\\ВНД\\';
+  const secDef=[
+    ['s1','Охрана труда','01_Охрана труда','e1',['e1','e8'],['труд'],[
+      ['И-ОТ','Инструкция по охране труда для оператора технологических установок'],
+      ['СТП-ОТ','Порядок проведения инструктажей по охране труда'],
+      ['П-ОТ','Положение о системе управления охраной труда'],
+      ['И-ОТ','Инструкция по оказанию первой помощи пострадавшим'],
+      ['СТП-ОТ','Порядок выдачи и применения средств индивидуальной защиты']]],
+    ['s2','Промышленная безопасность','02_Промышленная безопасность','e2',['e2','e8'],['промышлен','промбез'],[
+      ['П-ПБ','Положение о производственном контроле за соблюдением требований промышленной безопасности'],
+      ['И-ПБ','Инструкция по организации безопасного проведения огневых работ'],
+      ['И-ПБ','Инструкция по организации безопасного проведения газоопасных работ'],
+      ['ПЛА','План ликвидации аварий установки ЭЛОУ-АВТ'],
+      ['СТП-ПБ','Порядок допуска подрядных организаций к работам на объектах']]],
+    ['s3','Система менеджмента качества','03_СМК','e3',['e3','e10'],['качеств','смк'],[
+      ['РК','Руководство по качеству'],
+      ['СТП-СМК','Управление документированной информацией'],
+      ['СТП-СМК','Внутренние аудиты системы менеджмента'],
+      ['СТП-СМК','Управление несоответствиями и корректирующими действиями'],
+      ['СТП-СМК','Анализ системы менеджмента со стороны руководства']]],
+    ['s4','Производство','04_Производство','e4',['e4','e9'],['производ','технолог','регламент'],[
+      ['ТР','Технологический регламент установки каталитического риформинга'],
+      ['ТР','Технологический регламент установки замедленного коксования'],
+      ['И-ПР','Инструкция по приему и сдаче смены'],
+      ['СТП-ПР','Порядок ведения технологической документации'],
+      ['И-ПР','Инструкция по пуску и остановке установки гидроочистки']]],
+    ['s5','Охрана окружающей среды','05_Экология','e5',['e5'],['эколог','окружающ'],[
+      ['П-ООС','Положение о производственном экологическом контроле'],
+      ['И-ООС','Инструкция по обращению с отходами производства'],
+      ['СТП-ООС','Порядок учета выбросов загрязняющих веществ'],
+      ['П-ООС','Программа мониторинга воздействия на окружающую среду']]],
+    ['s6','Управление персоналом','06_Персонал','e6',['e6'],['персонал','кадр'],[
+      ['П-УП','Положение об оплате труда работников'],
+      ['П-УП','Положение о подготовке и аттестации персонала'],
+      ['СТП-УП','Порядок подбора и адаптации персонала'],
+      ['П-УП','Правила внутреннего трудового распорядка']]],
+    ['s7','Энергетика и ремонт','07_Энергетика','e7',['e7'],['энерг','ремонт','электр'],[
+      ['И-ЭН','Инструкция по эксплуатации электроустановок потребителей'],
+      ['П-РМ','Положение о планово-предупредительном ремонте оборудования'],
+      ['И-ЭН','Инструкция по эксплуатации сосудов, работающих под давлением'],
+      ['СТП-РМ','Порядок вывода оборудования в ремонт']]]
+  ];
+  const offsets=[-240,-130,-75,-41,-18,-7,-2,0,3,9,17,24,30,38,52,70,95,130,160,210,260,320,380,450,520,600,680,760,850,930,1010,1080];
+  for(let i=offsets.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[offsets[i],offsets[j]]=[offsets[j],offsets[i]]}
+  const t=parse(todayISO());const docs=[];let i=0;
+  const sections=secDef.map(([id,name,folder,resp,devs,aliases,items])=>{
+    const cnt={};
+    items.forEach(([pre,title])=>{
+      cnt[pre]=(cnt[pre]||0)+1;
+      const code=pre+'-'+pad(cnt[pre]);
+      const exp=iso(addDays(t,offsets[i]));
+      docs.push({id:'d'+(i+1),code,title,section:id,developer:devs[Math.floor(r()*devs.length)],
+        effective:addYears(exp,-3),expiryOverride:'',overrideReason:'',cancelled:'',
+        file:root+folder+'\\'+code+' '+title+'.pdf',note:'',verified:true,custom:{},extract:null});
+      i++;
+    });
+    return {id,name,folder,resp,aliases};
+  });
+  docs[4].cancelled=iso(addDays(t,-40));docs[4].note='Отменен, заменен новой редакцией';
+  docs[19].cancelled=iso(addDays(t,-120));docs[19].note='Отменен приказом по предприятию';
+  [9,17,28].forEach(k=>{docs[k].verified=false;docs[k].extract={code:'high',title:'high',effective:k===28?'low':'medium',section:'high'}});
+  docs[28].effective='';
+  const pool=[
+    {code:'И-ОТ-06',title:'Инструкция по охране труда при работе на высоте',section:'s1',folder:'01_Охрана труда',eff:-400,conf:'medium'},
+    {code:'И-ПБ-03',title:'Инструкция по безопасному проведению работ в резервуарах',section:'s2',folder:'02_Промышленная безопасность',eff:-900,conf:'medium'},
+    {code:'СТП-ООС-02',title:'Порядок обращения с нефтесодержащими отходами',section:'s5',folder:'05_Экология',eff:null,conf:'low'}
+  ];
+  return {v:1,emp,sections,docs,pool,
+    columns:DEFAULT_COLUMNS.map(c=>({...c,visible:c.visible!==false})),
+    settings:{company:'ПНХЗ',termYears:3,warnDays:30,repeatWarn:false,sendTime:'09:00',weekends:false,ccAdmin:true,notifyDeveloper:true,share:root,syncMinutes:60,logo:'',ollamaUrl:'',ollamaModel:''},
+    audit:[{ts:new Date().toISOString(),user:'система',action:'Синхронизация',details:'Первичная синхронизация: найдено 32 PDF-файла, 3 записи требуют проверки',docId:''}],
+    notifLog:[],lastSync:new Date().toISOString(),session:{role:'reader',email:''}};
+}
+function load(){
+  try{const raw=localStorage.getItem(STORE_KEY);if(raw){const o=JSON.parse(raw);if(o&&o.v===1){S=o;return}}}catch(e){}
+  S=seed();save();
+}
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(S))}catch(e){}}
+
+/* ====== Расчет ====== */
+function emp(id){return S.emp.find(e=>e.id===id)||{id:'',name:'—',email:'',position:''}}
+function sec(id){return S.sections.find(s=>s.id===id)||{id:'',name:'—',resp:''}}
+function calcExpiry(d){return d.expiryOverride||(d.effective?addYears(d.effective,+S.settings.termYears||3):'')}
+function E(){
+  const t=parse(todayISO());const warn=+S.settings.warnDays||30;
+  return S.docs.filter(d=>!d.deleted).map(d=>{
+    const s=sec(d.section);const expiry=calcExpiry(d);
+    let status,left=null,over=null;
+    if(d.cancelled&&parse(d.cancelled)<=t)status='cancelled';
+    else if(!d.verified||!d.effective)status='draft';
+    else{const x=diffDays(t,parse(expiry));if(x<0){status='overdue';over=-x}else{left=x;status=x<=warn?'expiring':'active'}}
+    return {...d,expiry,status,left,over,secName:s.name,respObj:emp(s.resp),devObj:emp(d.developer)};
+  });
+}
+function counts(a){const c={active:0,expiring:0,overdue:0,cancelled:0,draft:0};a.forEach(d=>c[d.status]++);return c}
+function pct(c){const base=c.active+c.expiring+c.overdue;return base?Math.round((c.active+c.expiring)/base*100):100}
+function list(){
+  let a=E();const q=F.q.trim().toLowerCase();
+  if(q)a=a.filter(d=>[d.code,d.title,d.secName,d.respObj.name,d.devObj.name,d.note].join(' ').toLowerCase().includes(q));
+  if(F.section)a=a.filter(d=>d.section===F.section);
+  if(F.resp)a=a.filter(d=>d.respObj.id===F.resp||d.devObj.id===F.resp);
+  if(F.status)a=a.filter(d=>d.status===F.status);
+  if(F.month)a=a.filter(d=>d.expiry&&d.expiry.slice(0,7)===F.month&&d.status!=='cancelled');
+  const k=SORT.key,dir=SORT.dir;
+  a.sort((x,y)=>{const vx=sv(x,k),vy=sv(y,k);
+    if(vx==null&&vy==null)return (x.expiry||'9999').localeCompare(y.expiry||'9999');
+    if(vx==null)return 1;if(vy==null)return -1;
+    if(typeof vx==='string')return vx.localeCompare(vy,'ru')*dir;
+    return (vx-vy)*dir;});
+  return a;
+}
+function sv(d,k){
+  switch(k){
+    case 'num':case 'file':return null;
+    case 'section':return d.secName;case 'sectionResp':return d.respObj.name;case 'developer':return d.devObj.name;
+    case 'email':return d.respObj.email;case 'status':return RANK[d.status];case 'left':return d.left;case 'overdue':return d.over;
+    default:if(k.startsWith('cf_'))return (d.custom&&d.custom[k])||null;return d[k]||null;
+  }
+}
+
+/* ====== Рендер: шапка ====== */
+function renderHeader(){
+  $('logo').innerHTML=S.settings.logo?`<img src="${esc(S.settings.logo)}" alt="Логотип предприятия">`:DEFAULT_LOGO;
+  $('companyName').textContent=S.settings.company||'';
+  document.body.classList.toggle('is-admin',isAdmin());
+  $('userBox').innerHTML=isAdmin()
+    ?`<div class="who"><b>Васькина Т.Г.</b><span class="role-admin">Администратор</span></div><button class="btn btn-sm" onclick="logout()">Выйти</button>`
+    :`<div class="who"><b>${esc(S.session.email||'Читатель')}</b><span class="muted">Только просмотр</span></div><button class="btn btn-sm" onclick="openLogin()">Войти как администратор</button>`;
+  $('heroMeta').textContent='Данные на '+fmt(todayISO())+'. Срок действия документа — '+S.settings.termYears+' '+plural(+S.settings.termYears,'год','года','лет')+' с даты введения.';
+  $('syncInfo').textContent='Синхронизация с сетевой папкой: '+fmtTs(S.lastSync)+', автоматически каждые '+S.settings.syncMinutes+' мин.';
+  document.querySelectorAll('.warnDaysTxt').forEach(el=>el.textContent=S.settings.warnDays);
+}
+
+/* ====== Рендер: дашборд ====== */
+function renderKPI(){
+  const a=E();const c=counts(a);
+  const items=[
+    ['','Всего документов',a.length,''],
+    ['active','Действуют',c.active,'k-ok'],
+    ['expiring','Истекают в '+S.settings.warnDays+' дней',c.expiring,'k-exp'],
+    ['overdue','Просрочены',c.overdue,'k-over'],
+    ['cancelled','Отменены',c.cancelled,''],
+    ['draft',isAdmin()?'Требуют заполнения':'Данные уточняются',c.draft,''],
+    ['pct','Актуальность',pct(c)+'%','k-pct']
+  ];
+  $('kpis').innerHTML=items.map(([s,l,v,cls])=>`<button class="kpi ${cls}" onclick="${s==='pct'||s===''?'resetFilters(true)':`setFilters({status:'${s}'})`}"><span class="v">${v}</span><span class="l">${esc(l)}</span></button>`).join('');
+}
+function renderTimeline(){
+  const a=E().filter(d=>['active','expiring','overdue'].includes(d.status));
+  const t=parse(todayISO());const warn=+S.settings.warnDays||30;
+  const start=addDays(t,-300),end=addDays(t,Math.max(1110,(+S.settings.termYears||3)*370));
+  const W=1000,L=200,R=18,rowH=38,top=40;const secs=S.sections;const H=top+secs.length*rowH+10;
+  const span=diffDays(start,end);
+  const X=d=>L+Math.min(Math.max(diffDays(start,d)/span,0),1)*(W-L-R);
+  let s=`<svg class="tl" viewBox="0 0 ${W} ${H}" role="img" aria-label="Шкала сроков действия документов по разделам">`;
+  s+=`<rect x="${L}" y="${top-8}" width="${X(t)-L}" height="${H-top+8}" fill="#FDECEA"/>`;
+  s+=`<rect x="${X(t)}" y="${top-8}" width="${X(addDays(t,warn))-X(t)}" height="${H-top+8}" fill="#FFF4E5"/>`;
+  let m=new Date(start.getFullYear(),start.getMonth()+1,1);
+  while(m<end){if(m.getMonth()%3===0){const x=X(m);s+=`<line x1="${x}" x2="${x}" y1="${top-8}" y2="${H}" stroke="#E1E7EB"/><text x="${x+4}" y="${top-14}" class="tl-tick">${MON_S[m.getMonth()]} ${m.getFullYear()}</text>`}m=new Date(m.getFullYear(),m.getMonth()+1,1)}
+  secs.forEach((sc,i)=>{
+    const y=top+i*rowH+rowH/2;
+    s+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="#E6EBEE" stroke-dasharray="2 4"/>`;
+    const nm=sc.name.length>26?sc.name.slice(0,25)+'…':sc.name;
+    s+=`<text x="${L-12}" y="${y+4}" text-anchor="end" class="tl-row"><title>${esc(sc.name)}</title>${esc(nm)}</text>`;
+    const ds=a.filter(d=>d.section===sc.id).map(d=>({d,x:X(parse(d.expiry))})).sort((p,q)=>p.x-q.x);
+    let lastX=-99,k=0;const offs=[0,-9,9,-4,4];
+    ds.forEach(({d,x})=>{k=(x-lastX<12)?k+1:0;lastX=x;const yy=y+offs[k%offs.length];
+      const tip=`${d.code} ${d.title}\nОкончание: ${fmt(d.expiry)}\n${d.status==='overdue'?'Просрочен на '+d.over+' дн.':'Осталось '+d.left+' дн.'}`;
+      s+=`<circle class="tl-dot" cx="${x.toFixed(1)}" cy="${yy}" r="6" fill="${SC[d.status]}" stroke="#fff" stroke-width="1.5" tabindex="0" onclick="openCard('${d.id}')" onkeydown="if(event.key==='Enter')openCard('${d.id}')"><title>${esc(tip)}</title></circle>`;});
+  });
+  const xt=X(t);
+  s+=`<line x1="${xt}" x2="${xt}" y1="${top-8}" y2="${H}" stroke="#1F5F7E" stroke-width="2"/>`;
+  s+=`<rect x="${xt-46}" y="2" width="92" height="20" rx="4" fill="#1F5F7E"/><text x="${xt}" y="16" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Сегодня</text>`;
+  s+='</svg>';
+  $('timeline').innerHTML=s;
+}
+function renderCharts(){
+  const a=E();const c=counts(a);const total=a.length||1;
+  // donut
+  const r=54,C=2*Math.PI*r;let acc=0;let segs='';
+  ORDER.forEach(st=>{const n=c[st];if(!n)return;const dash=n/total*C;
+    segs+=`<circle class="seg" cx="70" cy="70" r="${r}" fill="none" stroke="${SC[st]}" stroke-width="20" stroke-dasharray="${dash.toFixed(2)} ${(C-dash).toFixed(2)}" stroke-dashoffset="${(-acc).toFixed(2)}" transform="rotate(-90 70 70)" onclick="setFilters({status:'${st}'})"><title>${stLabel(st)}: ${n}</title></circle>`;acc+=dash;});
+  $('chDonut').innerHTML=`<div class="donut-box"><svg class="donut" viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="Распределение по статусам">${segs}<text x="70" y="68" text-anchor="middle" font-size="24" font-weight="600" fill="#1F5F7E">${pct(c)}%</text><text x="70" y="86" text-anchor="middle" font-size="10.5" fill="#5F6E78">актуальны</text></svg>
+    <ul class="dlist">${ORDER.map(st=>`<li><button onclick="setFilters({status:'${st}'})"><span><i style="background:${SC[st]}"></i>${esc(stLabel(st))}</span><b>${c[st]}</b></button></li>`).join('')}</ul></div>`;
+  // stacked by section
+  $('chStack').innerHTML=S.sections.map(sc=>{const ds=a.filter(d=>d.section===sc.id);const cc=counts(ds);const n=ds.length||1;
+    return `<div class="stack-row"><span title="${esc(sc.name)}">${esc(sc.name)}</span><div class="stack">${ORDER.filter(st=>cc[st]).map(st=>`<button style="width:${cc[st]/n*100}%;background:${SC[st]}" onclick="setFilters({section:'${sc.id}',status:'${st}'})" title="${esc(sc.name)}: ${stLabel(st)} — ${cc[st]}" aria-label="${esc(sc.name)}: ${stLabel(st)} ${cc[st]}"></button>`).join('')}</div><b style="text-align:right">${ds.length}</b></div>`}).join('');
+  // months
+  const t=parse(todayISO());const ms=[];
+  for(let k=0;k<12;k++){const d=new Date(t.getFullYear(),t.getMonth()+k,1);const key=d.getFullYear()+'-'+pad(d.getMonth()+1);
+    ms.push({key,label:MON_S[d.getMonth()]+(d.getMonth()===0||k===0?' '+String(d.getFullYear()).slice(2):''),n:a.filter(x=>x.expiry&&x.expiry.slice(0,7)===key&&['active','expiring','overdue'].includes(x.status)).length,name:MON[d.getMonth()]+' '+d.getFullYear()})}
+  const mx=Math.max(1,...ms.map(x=>x.n));
+  $('chMonths').innerHTML=`<div class="cols">${ms.map(x=>`<button onclick="setFilters({month:'${x.key}'})" title="${x.name}: ${x.n}" aria-label="${x.name}: ${x.n}"><span class="n">${x.n||''}</span><span class="bar" style="height:${x.n/mx*120}px"></span></button>`).join('')}</div><div class="cols-l">${ms.map(x=>`<span>${x.label}</span>`).join('')}</div>`;
+  // history
+  const hs=[];
+  for(let k=11;k>=0;k--){const endM=k===0?t:new Date(t.getFullYear(),t.getMonth()-k+1,0);
+    const n=S.docs.filter(d=>!d.deleted&&d.verified&&d.effective&&parse(d.effective)<=endM&&parse(calcExpiry(d))<endM&&!(d.cancelled&&parse(d.cancelled)<=endM)).length;
+    hs.push({n,l:MON_S[endM.getMonth()]})}
+  const hm=Math.max(1,...hs.map(h=>h.n));const HW=520,HH=170,px=24,py=22;
+  const hx=i=>px+i*(HW-2*px)/11,hy=n=>HH-py-(n/hm)*(HH-2*py-6);
+  let hsvg=`<svg viewBox="0 0 ${HW} ${HH}" width="100%" role="img" aria-label="Динамика просроченных документов"><line x1="${px}" x2="${HW-px}" y1="${HH-py}" y2="${HH-py}" stroke="#DCE3E8"/>`;
+  hsvg+=`<polyline fill="none" stroke="#D32F2F" stroke-width="2.2" points="${hs.map((h,i)=>hx(i)+','+hy(h.n)).join(' ')}"/>`;
+  hs.forEach((h,i)=>{hsvg+=`<circle cx="${hx(i)}" cy="${hy(h.n)}" r="3.5" fill="#fff" stroke="#D32F2F" stroke-width="2"/><text x="${hx(i)}" y="${hy(h.n)-9}" text-anchor="middle" font-size="11" font-weight="600" fill="#D32F2F">${h.n}</text><text x="${hx(i)}" y="${HH-6}" text-anchor="middle" font-size="10.5" fill="#7B8A94">${h.l}</text>`});
+  $('chHistory').innerHTML=hsvg+'</svg>';
+  // responsible overdue
+  const rm={};a.filter(d=>d.status==='overdue').forEach(d=>{const id=d.respObj.id;rm[id]=(rm[id]||0)+1});
+  const rl=Object.entries(rm).sort((p,q)=>q[1]-p[1]);const rmax=Math.max(1,...rl.map(x=>x[1]));
+  $('chResp').innerHTML=rl.length?rl.map(([id,n])=>`<div class="hbar-row"><button onclick="setFilters({resp:'${id}',status:'overdue'})"><span>${esc(emp(id).name)}</span><span class="hbar"><span style="width:${n/rmax*100}%"></span></span><b>${n}</b></button></div>`).join(''):'<p class="empty-chart">Просроченных документов нет.</p>';
+  // top10
+  const top=a.filter(d=>d.status==='overdue').sort((p,q)=>q.over-p.over).slice(0,10);
+  $('chTop').innerHTML=top.length?`<ol class="top10">${top.map(d=>`<li><button onclick="openCard('${d.id}')"><span><span class="t">${esc(d.code)} ${esc(d.title)}</span><br><span class="muted small">${esc(d.respObj.name)}, окончание ${fmt(d.expiry)}</span></span><span class="od">${d.over} ${plural(d.over,'день','дня','дней')}</span></button></li>`).join('')}</ol>`:'<p class="empty-chart">Просроченных документов нет.</p>';
+}
+
+/* ====== Рендер: реестр ====== */
+function renderFilters(){
+  $('fsec').innerHTML='<option value="">Все разделы</option>'+S.sections.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
+  const ids=new Set();S.sections.forEach(s=>s.resp&&ids.add(s.resp));S.docs.forEach(d=>d.developer&&ids.add(d.developer));
+  $('fresp').innerHTML='<option value="">Все</option>'+[...ids].map(emp).sort((p,q)=>p.name.localeCompare(q.name,'ru')).map(e=>`<option value="${e.id}">${esc(e.name)}</option>`).join('');
+  $('fstatus').innerHTML='<option value="">Все статусы</option>'+ORDER.map(s=>`<option value="${s}">${esc(stLabel(s))}</option>`).join('');
+  syncFilterControls();
+}
+function syncFilterControls(){$('fq').value=F.q;$('fsec').value=F.section;$('fresp').value=F.resp;$('fstatus').value=F.status;$('fmonth').value=F.month}
+function cellVal(d,c,i){
+  switch(c.key){
+    case 'num':return {h:i+1,cls:'num'};
+    case 'code':return {h:`<b>${esc(d.code)}</b>`};
+    case 'title':return {h:esc(d.title),cls:'title'};
+    case 'section':return {h:esc(d.secName)};
+    case 'sectionResp':return {h:esc(d.respObj.name)};
+    case 'developer':return {h:esc(d.devObj.name)};
+    case 'email':return {h:esc(d.respObj.email)};
+    case 'effective':case 'expiry':case 'cancelled':return {h:fmt(d[c.key]),cls:'date'};
+    case 'left':return {h:d.left??'',cls:'num'};
+    case 'overdue':return {h:d.over?`<span class="od">${d.over}</span>`:'',cls:'num'};
+    case 'status':return {h:badge(d.status)};
+    case 'file':return {h:d.file?`<button class="pdf-link" onclick="event.stopPropagation();openPdf('${d.id}')" title="${esc(d.file)}">PDF</button>`:'<span class="muted small">нет файла</span>'};
+    case 'note':return {h:esc(d.note)};
+    default:{const v=(d.custom||{})[c.key]||'';const col=S.columns.find(x=>x.key===c.key);return {h:esc(col&&col.type==='date'?fmt(v):v)}}
+  }
+}
+function renderRegistry(){
+  const a=list();const cols=S.columns.filter(c=>c.visible!==false);const all=S.docs.filter(d=>!d.deleted).length;
+  $('tbl').tHead.innerHTML='<tr>'+cols.map(c=>{const so=c.key!=='num'&&c.key!=='file';const ar=SORT.key===c.key?(SORT.dir>0?' ▲':' ▼'):'';
+    return `<th class="${so?'sortable':''}" ${so?`onclick="sortBy('${c.key}')" aria-sort="${SORT.key===c.key?(SORT.dir>0?'ascending':'descending'):'none'}"`:''}>${esc(c.label)}${ar}</th>`}).join('')+'</tr>';
+  $('tbl').tBodies[0].innerHTML=a.length?a.map((d,i)=>`<tr class="${d.status==='overdue'?'row-over':d.status==='draft'?'row-draft':''}" onclick="openCard('${d.id}')" tabindex="0" onkeydown="if(event.key==='Enter')openCard('${d.id}')">${cols.map(c=>{const v=cellVal(d,c,i);return `<td class="${v.cls||''}">${v.h}</td>`}).join('')}</tr>`).join('')
+    :`<tr><td colspan="${cols.length}" class="empty">По выбранным условиям документов нет. <button class="btn-link" onclick="resetFilters()">Сбросить фильтры</button></td></tr>`;
+  $('count').textContent=`Показано ${a.length} из ${all} ${plural(all,'документа','документов','документов')}`;
+  const ch=[];
+  if(F.q)ch.push(['q','Поиск: '+F.q]);
+  if(F.section)ch.push(['section','Раздел: '+sec(F.section).name]);
+  if(F.resp)ch.push(['resp','Ответственный: '+emp(F.resp).name]);
+  if(F.status)ch.push(['status','Статус: '+stLabel(F.status)]);
+  if(F.month){const [y,m]=F.month.split('-');ch.push(['month','Окончание: '+MON[+m-1]+' '+y])}
+  $('chips').innerHTML=ch.map(([k,l])=>`<span class="chip">${esc(l)}<button onclick="F.${k}='';syncFilterControls();renderRegistry()" aria-label="Убрать фильтр">×</button></span>`).join('')+(ch.length>1?'<button class="btn-link small" onclick="resetFilters()">Сбросить все</button>':'');
+}
+function sortBy(k){if(SORT.key===k)SORT.dir*=-1;else{SORT.key=k;SORT.dir=(k==='overdue'?-1:1)}renderRegistry()}
+function setFilters(o,scroll=true){F={q:'',section:'',resp:'',status:'',month:'',...o};syncFilterControls();renderRegistry();if(scroll)$('registry').scrollIntoView({behavior:reduced()?'auto':'smooth'})}
+function resetFilters(scroll){setFilters({},!!scroll)}
+
+/* ====== Рендер: ответственные ====== */
+function renderResp(){
+  const a=E();
+  $('respTbl').innerHTML='<thead><tr><th>Раздел</th><th>Ответственный за раздел</th><th>Должность</th><th>Email</th><th style="text-align:right">Документов</th><th style="text-align:right">Истекают</th><th style="text-align:right">Просрочено</th></tr></thead><tbody>'+
+    S.sections.map(s=>{const ds=a.filter(d=>d.section===s.id);const c=counts(ds);const e=emp(s.resp);
+      return `<tr><td><button class="btn-link" onclick="setFilters({section:'${s.id}'})">${esc(s.name)}</button></td><td><b>${esc(e.name)}</b></td><td class="muted">${esc(e.position)}</td><td>${e.email?`<a href="mailto:${esc(e.email)}">${esc(e.email)}</a>`:''}</td><td class="n">${ds.length}</td><td class="n">${c.expiring||''}</td><td class="n">${c.overdue?`<span class="od">${c.overdue}</span>`:'0'}</td></tr>`}).join('')+'</tbody>';
+}
+
+/* ====== Модальные окна ====== */
+function openModal(title,body,foot,wide){
+  $('modal').className='modal'+(wide?' wide':'');
+  $('modal').innerHTML=`<div class="modal-h"><h2 id="modalTitle">${title}</h2><button class="x" onclick="closeModal()" aria-label="Закрыть">×</button></div><div class="modal-b">${body}</div>${foot?`<div class="modal-f">${foot}</div>`:''}`;
+  $('overlay').classList.add('open');
+  setTimeout(()=>{const f=$('modal').querySelector('input:not([type=hidden]),select,textarea,button.btn');f&&f.focus()},30);
+}
+function closeModal(){$('overlay').classList.remove('open');EDIT=null}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('overlay').classList.contains('open'))closeModal();else toggleChat(false)}});
+
+function openCard(id){
+  const d=E().find(x=>x.id===id);if(!d)return;
+  const hist=S.audit.filter(h=>h.docId===id).slice(0,10);
+  const custom=S.columns.filter(c=>c.key.startsWith('cf_'));
+  const body=`<dl class="props">
+    <dt>Статус</dt><dd>${badge(d.status)}</dd>
+    <dt>Раздел</dt><dd>${esc(d.secName)}</dd>
+    <dt>Ответственный за раздел</dt><dd>${esc(d.respObj.name)}${d.respObj.email?`, <a href="mailto:${esc(d.respObj.email)}">${esc(d.respObj.email)}</a>`:''}</dd>
+    <dt>Ответственный за разработку</dt><dd>${esc(d.devObj.name)}</dd>
+    <dt>Дата введения в действие</dt><dd>${fmt(d.effective)||'<span class="muted">не указана</span>'}</dd>
+    <dt>Дата окончания действия</dt><dd>${fmt(d.expiry)||'—'}${d.expiryOverride?` <span class="muted small">(установлена вручную: ${esc(d.overrideReason)})</span>`:d.expiry?` <span class="muted small">(дата введения + ${S.settings.termYears} ${plural(+S.settings.termYears,'год','года','лет')})</span>`:''}</dd>
+    <dt>Дата отмены</dt><dd>${fmt(d.cancelled)||'—'}</dd>
+    ${d.status==='overdue'?`<dt>Дни просрочки</dt><dd class="od">${d.over} ${plural(d.over,'день','дня','дней')}</dd>`:''}
+    ${d.left!=null?`<dt>Осталось дней</dt><dd>${d.left}</dd>`:''}
+    ${custom.map(c=>`<dt>${esc(c.label)}</dt><dd>${esc(c.type==='date'?fmt((d.custom||{})[c.key]):(d.custom||{})[c.key]||'')||'—'}</dd>`).join('')}
+    <dt>Файл</dt><dd style="word-break:break-all">${esc(d.file)||'—'}</dd>
+    ${d.note?`<dt>Примечание</dt><dd>${esc(d.note)}</dd>`:''}
+  </dl>
+  ${hist.length?`<div class="spacer"></div><h3 style="font-size:14px;margin:0 0 6px">История изменений</h3><table class="simple"><tbody>${hist.map(h=>`<tr><td class="small" style="white-space:nowrap">${fmtTs(h.ts)}</td><td class="small">${esc(h.user)}</td><td class="small">${esc(h.action)}: ${esc(h.details)}</td></tr>`).join('')}</tbody></table>`:''}`;
+  const foot=`${isAdmin()?`<button class="btn btn-danger" onclick="askDelete('${id}')">Удалить</button><button class="btn" onclick="editDoc('${id}')">${d.status==='draft'?'Проверить и заполнить':'Изменить'}</button>`:''}<button class="btn btn-primary" onclick="openPdf('${id}')" ${d.file?'':'disabled'}>Открыть PDF</button>`;
+  openModal(esc(d.code)+' '+esc(d.title),body,foot);
+}
+function openPdf(id){
+  const d=S.docs.find(x=>x.id===id);if(!d||!d.file)return;
+  audit('Просмотр PDF',d.code,id);save();
+  openModal('PDF: '+esc(d.code)+' '+esc(d.title),
+    `<p class="note">Файл открывается из сетевой папки: <b style="word-break:break-all">${esc(d.file)}</b>. Если просмотр ниже не загрузился, значит браузер запрещает прямой доступ к сетевым путям. В рабочей версии PDF передается через сервер сайта и открывается во встроенном просмотрщике.</p><div class="spacer"></div>
+     <iframe class="pdf-frame" src="${fileHref(d.file)}" title="Просмотр PDF"></iframe>`,
+    `<a class="btn" href="${fileHref(d.file)}" download>Скачать</a><button class="btn btn-primary" onclick="openCard('${id}')">К карточке документа</button>`,true);
+}
+
+/* ====== Вход ====== */
+function openLogin(){
+  openModal('Вход администратора',`<p class="muted" style="margin-top:0">В рабочей версии вход выполняется автоматически по учетной записи Active Directory. В демо введите адрес электронной почты.</p>
+    <label class="field">Электронная почта<input id="loginEmail" type="email" placeholder="t.vaskina@pnhz.kz" onkeydown="if(event.key==='Enter')doLogin()"></label><div id="loginErr" class="form-err"></div>`,
+    `<button class="btn" onclick="closeModal()">Отмена</button><button class="btn btn-primary" onclick="doLogin()">Войти</button>`);
+}
+function doLogin(){
+  const v=$('loginEmail').value.trim().toLowerCase();
+  if(!v){$('loginErr').textContent='Введите адрес электронной почты.';return}
+  if(v===ADMIN_EMAIL){S.session={role:'admin',email:v};audit('Вход','Вход администратора');toast('Вы вошли как администратор')}
+  else{S.session={role:'reader',email:v};toast('Права администратора есть только у '+ADMIN_EMAIL+'. Открыт режим просмотра.')}
+  save();closeModal();renderAll();
+}
+function logout(){audit('Выход','Выход администратора');S.session={role:'reader',email:''};save();renderAll();toast('Вы вышли. Включен режим просмотра.')}
+
+/* ====== Редактирование ====== */
+function editDoc(id){
+  if(!isAdmin())return toast('Изменять данные может только администратор');
+  const isNew=!id;
+  EDIT=isNew?{id:uid('d'),code:'',title:'',section:F.section||S.sections[0].id,developer:'',effective:'',expiryOverride:'',overrideReason:'',cancelled:'',file:'',note:'',verified:true,custom:{},extract:null,_new:true}
+    :JSON.parse(JSON.stringify(S.docs.find(x=>x.id===id)));
+  const d=EDIT;const draft=!d.verified;
+  const conf=k=>d.extract&&d.extract[k]?`<span class="conf ${d.extract[k]}">${{high:'извлечено, высокая уверенность',medium:'извлечено, проверьте',low:'не удалось извлечь'}[d.extract[k]]}</span>`:'';
+  const custom=S.columns.filter(c=>c.key.startsWith('cf_'));
+  const form=`<div class="form-grid">
+    <label class="field">Обозначение (шифр) *${conf('code')}<input id="f_code" type="text" value="${esc(d.code)}"></label>
+    <label class="field">Раздел *${conf('section')}<select id="f_section">${S.sections.map(s=>`<option value="${s.id}" ${s.id===d.section?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label>
+    <label class="field full">Наименование документа *${conf('title')}<input id="f_title" type="text" value="${esc(d.title)}"></label>
+    <label class="field">Ответственный за разработку *<select id="f_dev"><option value="">Не выбран</option>${S.emp.map(e=>`<option value="${e.id}" ${e.id===d.developer?'selected':''}>${esc(e.name)}</option>`).join('')}</select></label>
+    <label class="field">Дата введения в действие *${conf('effective')}<input id="f_eff" type="date" value="${esc(d.effective)}" oninput="updCalc()"></label>
+    <div class="full calc" id="f_calc"></div>
+    <label class="check full"><input id="f_ovr" type="checkbox" ${d.expiryOverride?'checked':''} onchange="updCalc()"> Установить дату окончания вручную (исключение из правила ${S.settings.termYears} лет)</label>
+    <label class="field ovr">Дата окончания действия<input id="f_exp" type="date" value="${esc(d.expiryOverride)}"></label>
+    <label class="field ovr">Причина (обязательно)<input id="f_reason" type="text" value="${esc(d.overrideReason)}"></label>
+    <label class="field">Дата отмены действия<input id="f_cancel" type="date" value="${esc(d.cancelled)}"></label>
+    <label class="field">Путь к PDF в сетевой папке<input id="f_file" type="text" value="${esc(d.file)}" placeholder="${esc(S.settings.share)}..."></label>
+    ${custom.map(c=>`<label class="field">${esc(c.label)}<input id="f_${c.key}" type="${c.type==='date'?'date':c.type==='number'?'number':'text'}" value="${esc((d.custom||{})[c.key]||'')}"></label>`).join('')}
+    <label class="field full">Примечание<textarea id="f_note">${esc(d.note)}</textarea></label>
+  </div><div class="form-err" id="f_err"></div>`;
+  const body=draft?`<div class="verify"><div class="pdf-ph"><div class="sheet"><i style="width:60%"></i><i></i><i></i><i style="width:80%"></i><i></i><i style="width:40%"></i></div><b>${esc(d.file.split('\\').pop()||'Файл')}</b><span class="small">Первая страница документа. В рабочей версии здесь открывается PDF для сверки с извлеченными данными.</span><div class="spacer"></div><button class="btn btn-sm" onclick="openPdf('${d.id}')">Открыть PDF</button></div><div>${form}</div></div>`:form;
+  const foot=`<button class="btn" onclick="closeModal()">Отмена</button>${draft?`<button class="btn btn-primary" onclick="saveDoc(true)">Подтвердить и сохранить</button>`:`<button class="btn btn-primary" onclick="saveDoc(false)">Сохранить</button>`}`;
+  openModal(d._new?'Новый документ':draft?'Проверка данных документа':'Изменение документа',body,foot,draft);
+  updCalc();
+}
+function updCalc(){
+  const eff=$('f_eff').value,ovr=$('f_ovr').checked;
+  document.querySelectorAll('.ovr').forEach(el=>el.style.display=ovr?'':'none');
+  $('f_calc').textContent=eff?('Дата окончания действия: '+fmt(addYears(eff,+S.settings.termYears))+' (дата введения + '+S.settings.termYears+' '+plural(+S.settings.termYears,'год','года','лет')+')'+(ovr?'. Будет заменена датой, указанной вручную.':'')):'Укажите дату введения — дата окончания рассчитается автоматически.';
+}
+function saveDoc(confirmDraft){
+  const d=EDIT;if(!d)return;
+  const v=id=>$(id).value.trim();
+  const errs=[];
+  const upd={code:v('f_code'),title:v('f_title'),section:v('f_section'),developer:v('f_dev'),effective:v('f_eff'),cancelled:v('f_cancel'),file:v('f_file'),note:v('f_note')};
+  if(!upd.code)errs.push('обозначение');if(!upd.title)errs.push('наименование');if(!upd.developer)errs.push('ответственный за разработку');if(!upd.effective)errs.push('дата введения');
+  const ovr=$('f_ovr').checked;
+  upd.expiryOverride=ovr?v('f_exp'):'';upd.overrideReason=ovr?v('f_reason'):'';
+  if(ovr&&(!upd.expiryOverride||!upd.overrideReason))errs.push('дата окончания и причина ручной установки');
+  if(errs.length){$('f_err').textContent='Заполните обязательные поля: '+errs.join(', ')+'.';return}
+  upd.custom={...(d.custom||{})};S.columns.filter(c=>c.key.startsWith('cf_')).forEach(c=>{upd.custom[c.key]=v('f_'+c.key)});
+  const old=S.docs.find(x=>x.id===d.id);
+  if(confirmDraft||d._new){upd.verified=true;upd.extract=null}
+  if(old){
+    const changes=Object.keys(upd).filter(k=>k!=='custom'&&k!=='extract'&&String(old[k]??'')!==String(upd[k]??'')).map(k=>k+': «'+(old[k]||'')+'» → «'+(upd[k]||'')+'»');
+    Object.assign(old,upd);
+    audit(confirmDraft?'Подтверждение':'Изменение',(confirmDraft?'Данные проверены. ':'')+(changes.join('; ')||'без изменений'),d.id);
+  }else{
+    const nd={...d,...upd};delete nd._new;S.docs.push(nd);audit('Добавление',upd.code+' '+upd.title,nd.id);
+  }
+  save();closeModal();renderAll();toast(confirmDraft?'Данные подтверждены':'Изменения сохранены');
+}
+function askDelete(id){
+  const d=S.docs.find(x=>x.id===id);
+  openModal('Удалить документ из реестра?',`<p>${esc(d.code)} ${esc(d.title)}</p><p class="muted">Запись можно восстановить в течение 30 дней на вкладке «Проверка и удаленные». Файл в сетевой папке не удаляется.</p>`,
+    `<button class="btn" onclick="closeModal()">Отмена</button><button class="btn btn-danger" onclick="doDelete('${id}')">Удалить</button>`);
+}
+function doDelete(id){const d=S.docs.find(x=>x.id===id);d.deleted=true;d.deletedAt=new Date().toISOString();audit('Удаление',d.code+' '+d.title,id);save();closeModal();renderAll();toast('Документ удален из реестра')}
+function restoreDoc(id){const d=S.docs.find(x=>x.id===id);delete d.deleted;delete d.deletedAt;audit('Восстановление',d.code,id);save();renderAll();toast('Документ восстановлен')}
+
+/* ====== Синхронизация ====== */
+function syncNow(){
+  if(!isAdmin())return;
+  S.lastSync=new Date().toISOString();
+  const p=S.pool.shift();
+  if(p){
+    const t=parse(todayISO());
+    const nd={id:uid('d'),code:p.code,title:p.title,section:p.section,developer:sec(p.section).resp,effective:p.eff==null?'':iso(addDays(t,p.eff)),expiryOverride:'',overrideReason:'',cancelled:'',file:S.settings.share+p.folder+'\\'+p.code+' '+p.title+'.pdf',note:'',verified:false,custom:{},extract:{code:'high',title:'high',section:'high',effective:p.conf}};
+    S.docs.push(nd);audit('Синхронизация','Найден новый файл: '+p.code+' '+p.title+'. Требует проверки',nd.id);
+    toast('Найден 1 новый файл. Он добавлен в очередь проверки.');adminTab='queue';
+  }else{audit('Синхронизация','Изменений не найдено');toast('Синхронизация завершена: изменений нет')}
+  save();renderAll();
+}
+
+/* ====== Администрирование ====== */
+function renderAdmin(){
+  if(!isAdmin()){$('adminBody').innerHTML='';return}
+  const drafts=E().filter(d=>d.status==='draft').length;
+  const tabs=[['queue','Проверка и удаленные',drafts],['form','Форма отчета'],['dicts','Разделы и сотрудники'],['notify','Уведомления'],['audit','Журнал действий'],['settings','Настройки']];
+  $('adminTabs').innerHTML=tabs.map(([k,l,n])=>`<button role="tab" aria-selected="${adminTab===k}" onclick="adminTab='${k}';renderAdmin()">${l}${n?`<span class="cnt">${n}</span>`:''}</button>`).join('');
+  $('adminBody').innerHTML={queue:aQueue,form:aForm,dicts:aDicts,notify:aNotify,audit:aAudit,settings:aSettings}[adminTab]();
+}
+function aQueue(){
+  const dr=E().filter(d=>d.status==='draft');
+  const del=S.docs.filter(d=>d.deleted&&(Date.now()-new Date(d.deletedAt).getTime())<30*864e5);
+  const total=S.docs.filter(d=>!d.deleted).length;
+  return `<h3>Требуют заполнения</h3><p class="sub">Проверено ${total-dr.length} из ${total}. Данные новых файлов извлекаются автоматически из имени, метаданных и первой страницы PDF, но учитываются в отчете только после вашего подтверждения.</p>
+  ${dr.length?`<table class="simple"><thead><tr><th>Обозначение</th><th>Наименование</th><th>Раздел</th><th>Дата введения</th><th></th></tr></thead><tbody>${dr.map(d=>`<tr><td><b>${esc(d.code)}</b></td><td>${esc(d.title)}</td><td>${esc(d.secName)}</td><td>${d.effective?fmt(d.effective):'<span class="od">не найдена</span>'}</td><td style="text-align:right"><button class="btn btn-sm btn-primary" onclick="editDoc('${d.id}')">Проверить</button></td></tr>`).join('')}</tbody></table>`:'<p class="note">Все документы проверены.</p>'}
+  <div class="spacer"></div><h3>Удаленные за 30 дней</h3>
+  ${del.length?`<table class="simple"><tbody>${del.map(d=>`<tr><td><b>${esc(d.code)}</b> ${esc(d.title)}</td><td class="small muted">удален ${fmtTs(d.deletedAt)}</td><td style="text-align:right"><button class="btn btn-sm" onclick="restoreDoc('${d.id}')">Восстановить</button></td></tr>`).join('')}</tbody></table>`:'<p class="muted">Удаленных документов нет.</p>'}`;
+}
+function aForm(){
+  return `<h3>Столбцы отчета</h3><p class="sub">Порядок, названия и видимость столбцов применяются к реестру и к выгрузкам в Excel и PDF для всех пользователей.</p>
+  <table class="simple"><thead><tr><th style="width:90px">Порядок</th><th style="width:90px">Показывать</th><th>Название столбца</th><th>Тип</th><th></th></tr></thead><tbody>
+  ${S.columns.map((c,i)=>`<tr><td><button class="btn btn-sm" onclick="moveCol(${i},-1)" ${i===0?'disabled':''} aria-label="Выше">▲</button> <button class="btn btn-sm" onclick="moveCol(${i},1)" ${i===S.columns.length-1?'disabled':''} aria-label="Ниже">▼</button></td>
+  <td><input type="checkbox" ${c.visible!==false?'checked':''} onchange="colVis(${i},this.checked)" aria-label="Показывать столбец"></td>
+  <td><input type="text" value="${esc(c.label)}" onchange="colRename(${i},this.value)"></td>
+  <td class="small muted">${c.key.startsWith('cf_')?{text:'Текст',date:'Дата',number:'Число'}[c.type]+', дополнительный':'Стандартный'}</td>
+  <td style="text-align:right">${c.key.startsWith('cf_')?`<button class="btn btn-sm btn-danger" onclick="colDel(${i})">Удалить</button>`:''}</td></tr>`).join('')}
+  </tbody></table>
+  <div class="spacer"></div><h3>Добавить столбец</h3>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+    <label class="field" style="flex:1;min-width:220px">Название<input id="nc_label" type="text" placeholder="Например, Номер приказа"></label>
+    <label class="field">Тип<select id="nc_type"><option value="text">Текст</option><option value="date">Дата</option><option value="number">Число</option></select></label>
+    <button class="btn btn-primary" onclick="colAdd()">Добавить столбец</button>
+    <button class="btn" onclick="colReset()">Вернуть стандартную форму</button>
+  </div>`;
+}
+function moveCol(i,d){const a=S.columns;[a[i],a[i+d]]=[a[i+d],a[i]];audit('Форма отчета','Изменен порядок столбцов');save();renderRegistry();renderAdmin()}
+function colVis(i,v){S.columns[i].visible=v;audit('Форма отчета',(v?'Показан':'Скрыт')+' столбец «'+S.columns[i].label+'»');save();renderRegistry()}
+function colRename(i,v){v=v.trim();if(!v)return renderAdmin();audit('Форма отчета','Столбец «'+S.columns[i].label+'» переименован в «'+v+'»');S.columns[i].label=v;save();renderRegistry()}
+function colDel(i){const c=S.columns[i];if(!confirm('Удалить столбец «'+c.label+'» и его значения?'))return;S.columns.splice(i,1);S.docs.forEach(d=>{if(d.custom)delete d.custom[c.key]});audit('Форма отчета','Удален столбец «'+c.label+'»');save();renderAll()}
+function colAdd(){const l=$('nc_label').value.trim();if(!l)return toast('Введите название столбца');S.columns.push({key:uid('cf_'),label:l,type:$('nc_type').value,visible:true,custom:true});audit('Форма отчета','Добавлен столбец «'+l+'»');save();renderAll();toast('Столбец добавлен')}
+function colReset(){if(!confirm('Вернуть стандартную форму отчета? Дополнительные столбцы будут скрыты, их значения сохранятся.'))return;const cf=S.columns.filter(c=>c.key.startsWith('cf_')).map(c=>({...c,visible:false}));S.columns=DEFAULT_COLUMNS.map(c=>({...c,visible:c.visible!==false})).concat(cf);audit('Форма отчета','Восстановлена стандартная форма');save();renderAll()}
+
+function aDicts(){
+  return `<div class="grid2"><div>
+    <h3>Разделы</h3><p class="sub">Ответственный за раздел получает уведомления по документам раздела.</p>
+    <table class="simple"><thead><tr><th>Раздел</th><th>Подпапка</th><th>Ответственный</th></tr></thead><tbody>
+    ${S.sections.map((s,i)=>`<tr><td><input type="text" value="${esc(s.name)}" onchange="secUpd(${i},'name',this.value)"></td><td><input type="text" value="${esc(s.folder)}" onchange="secUpd(${i},'folder',this.value)"></td><td><select onchange="secUpd(${i},'resp',this.value)">${S.emp.map(e=>`<option value="${e.id}" ${e.id===s.resp?'selected':''}>${esc(e.name)}</option>`).join('')}</select></td></tr>`).join('')}
+    </tbody></table><div class="spacer"></div><button class="btn" onclick="secAdd()">Добавить раздел</button>
+  </div><div>
+    <h3>Сотрудники</h3><p class="sub">ФИО и адреса для уведомлений.</p>
+    <table class="simple"><thead><tr><th>ФИО</th><th>Должность</th><th>Email</th><th></th></tr></thead><tbody>
+    ${S.emp.map((e,i)=>`<tr><td><input type="text" value="${esc(e.name)}" onchange="empUpd(${i},'name',this.value)"></td><td><input type="text" value="${esc(e.position)}" onchange="empUpd(${i},'position',this.value)"></td><td><input type="email" value="${esc(e.email)}" onchange="empUpd(${i},'email',this.value)"></td><td><button class="btn btn-sm btn-danger" onclick="empDel(${i})" aria-label="Удалить сотрудника">×</button></td></tr>`).join('')}
+    </tbody></table><div class="spacer"></div><button class="btn" onclick="empAdd()">Добавить сотрудника</button>
+  </div></div>`;
+}
+function secUpd(i,k,v){audit('Справочник','Раздел «'+S.sections[i].name+'»: '+k+' → '+(k==='resp'?emp(v).name:v));S.sections[i][k]=v;save();renderAll()}
+function secAdd(){S.sections.push({id:uid('s'),name:'Новый раздел',folder:'',resp:S.emp[0].id,aliases:[]});audit('Справочник','Добавлен раздел');save();renderAll()}
+function empUpd(i,k,v){audit('Справочник','Сотрудник «'+S.emp[i].name+'»: '+k+' → '+v);S.emp[i][k]=v.trim();save();renderAll()}
+function empAdd(){S.emp.push({id:uid('e'),name:'Новый сотрудник',position:'',email:''});audit('Справочник','Добавлен сотрудник');save();renderAll()}
+function empDel(i){const e=S.emp[i];if(S.sections.some(s=>s.resp===e.id)||S.docs.some(d=>!d.deleted&&d.developer===e.id))return toast('Сотрудник назначен ответственным. Сначала замените его в разделах и документах.');S.emp.splice(i,1);audit('Справочник','Удален сотрудник «'+e.name+'»');save();renderAll()}
+
+function notifPlan(){
+  const s=S.settings;const days=[+s.warnDays].concat(s.repeatWarn?[14,7]:[]);const map={};
+  const add=(e,type,d)=>{if(!e||!e.email)return;(map[e.email]=map[e.email]||{emp:e,warn:[],over:[]})[type].push(d)};
+  E().forEach(d=>{let type=null;if(d.status==='overdue')type='over';else if(d.status==='expiring'&&days.includes(d.left))type='warn';if(!type)return;
+    add(d.respObj,type,d);if(s.notifyDeveloper&&d.devObj.id&&d.devObj.id!==d.respObj.id)add(d.devObj,type,d)});
+  return Object.values(map).map(m=>{
+    const subj=m.over.length?`[ПРОСРОЧЕНО] Внутренние документы требуют актуализации: ${m.over.length}`:`[ИСТЕКАЕТ] Срок действия внутренних документов заканчивается через ${s.warnDays} дней`;
+    let body=`Уважаемый(ая) ${m.emp.name}!\n\n`;
+    if(m.over.length)body+=`Срок действия следующих внутренних документов истек:\n`+m.over.map(d=>`  • ${d.code} ${d.title}\n    окончание ${fmt(d.expiry)}, дней просрочки: ${d.over}`).join('\n')+'\n\n';
+    if(m.warn.length)body+=`Срок действия следующих документов заканчивается:\n`+m.warn.map(d=>`  • ${d.code} ${d.title}\n    окончание ${fmt(d.expiry)}, осталось дней: ${d.left}`).join('\n')+'\n\n';
+    body+=`Просим организовать актуализацию документов.\nОтчет: «Отчет об актуальности внутренних документов предприятия».\n\nПисьмо сформировано автоматически, отвечать на него не нужно.`;
+    return {to:m.emp.email,cc:s.ccAdmin&&m.emp.email!==ADMIN_EMAIL?ADMIN_EMAIL:'',subj,body,n:m.over.length+m.warn.length};
+  });
+}
+function aNotify(){
+  const s=S.settings;const plan=notifPlan();const wd=new Date().getDay();const off=(wd===0||wd===6)&&!s.weekends;
+  return `<div class="grid2"><div>
+    <h3>Правила рассылки</h3><p class="sub">Предупреждение отправляется за ${s.warnDays} дней до окончания действия, о просрочке — ежедневно до актуализации или отмены документа. Документам одного ответственного соответствует одно сводное письмо.</p>
+    <div class="form-grid">
+      <label class="field">Предупреждать за, дней<input type="number" min="1" max="180" value="${s.warnDays}" onchange="setSetting('warnDays',Math.max(1,+this.value||30))"></label>
+      <label class="field">Время отправки<input type="time" value="${s.sendTime}" onchange="setSetting('sendTime',this.value)"></label>
+      <label class="check full"><input type="checkbox" ${s.repeatWarn?'checked':''} onchange="setSetting('repeatWarn',this.checked)"> Повторять предупреждение за 14 и 7 дней</label>
+      <label class="check full"><input type="checkbox" ${s.weekends?'checked':''} onchange="setSetting('weekends',this.checked)"> Отправлять в выходные дни</label>
+      <label class="check full"><input type="checkbox" ${s.notifyDeveloper?'checked':''} onchange="setSetting('notifyDeveloper',this.checked)"> Уведомлять также ответственного за разработку</label>
+      <label class="check full"><input type="checkbox" ${s.ccAdmin?'checked':''} onchange="setSetting('ccAdmin',this.checked)"> Копия администратору (${ADMIN_EMAIL})</label>
+    </div>
+  </div><div>
+    <h3>Рассылка на сегодня, ${fmt(todayISO())}</h3><p class="sub">${plan.length} ${plural(plan.length,'письмо','письма','писем')}, отправка в ${s.sendTime}.</p>
+    ${off?'<p class="note warn">Сегодня выходной. По настройкам рассылка не выполняется.</p><div class="spacer"></div>':''}
+    ${plan.map(p=>`<details class="letter"><summary><span><b>${esc(p.to)}</b>${p.cc?` <span class="muted small">копия ${esc(p.cc)}</span>`:''}</span><span class="small ${p.subj.startsWith('[ПРОСР')?'od':''}">${esc(p.subj)}</span></summary><pre>${esc(p.body)}</pre></details>`).join('')||'<p class="muted">Сегодня писем нет.</p>'}
+    ${plan.length?`<button class="btn btn-primary" onclick="sendNow()">Отправить сейчас</button> <span class="muted small">В демо письма записываются в журнал, но не отправляются.</span>`:''}
+  </div></div>
+  <div class="spacer"></div><h3>Журнал отправки</h3>
+  ${S.notifLog.length?`<table class="simple"><thead><tr><th>Время</th><th>Кому</th><th>Тема</th><th>Документов</th><th>Результат</th></tr></thead><tbody>${S.notifLog.slice(0,100).map(l=>`<tr><td class="small">${fmtTs(l.ts)}</td><td>${esc(l.to)}${l.cc?`<br><span class="muted small">копия ${esc(l.cc)}</span>`:''}</td><td class="small">${esc(l.subj)}</td><td>${l.n}</td><td class="small">${esc(l.status)}</td></tr>`).join('')}</tbody></table>`:'<p class="muted">Писем еще не было.</p>'}`;
+}
+function sendNow(){const p=notifPlan();const ts=new Date().toISOString();p.forEach(x=>S.notifLog.unshift({ts,to:x.to,cc:x.cc,subj:x.subj,n:x.n,status:'Записано (демо-режим, без отправки)'}));audit('Уведомления','Сформировано писем: '+p.length);save();renderAdmin();toast('Сформировано писем: '+p.length)}
+
+function aAudit(){
+  return `<h3>Журнал действий</h3><p class="sub">Все изменения, входы, выгрузки и рассылки. Записи журнала нельзя изменить.</p>
+  <table class="simple"><thead><tr><th>Время</th><th>Пользователь</th><th>Действие</th><th>Подробности</th></tr></thead><tbody>
+  ${S.audit.slice(0,300).map(h=>`<tr><td class="small" style="white-space:nowrap">${fmtTs(h.ts)}</td><td class="small">${esc(h.user)}</td><td>${esc(h.action)}</td><td class="small">${esc(h.details)}${h.docId?` <button class="btn-link small" onclick="openCard('${h.docId}')">открыть</button>`:''}</td></tr>`).join('')}
+  </tbody></table>`;
+}
+function aSettings(){
+  const s=S.settings;
+  return `<div class="grid2"><div>
+    <h3>Предприятие и сроки</h3><p class="sub">Изменение срока действия пересчитывает даты окончания всех документов, кроме установленных вручную.</p>
+    <div class="form-grid">
+      <label class="field full">Наименование предприятия в шапке<input type="text" value="${esc(s.company)}" onchange="setSetting('company',this.value.trim())"></label>
+      <label class="field">Срок действия документа, лет<input type="number" min="1" max="10" value="${s.termYears}" onchange="setSetting('termYears',Math.max(1,+this.value||3))"></label>
+      <label class="field">Статус «Истекает» за, дней<input type="number" min="1" max="180" value="${s.warnDays}" onchange="setSetting('warnDays',Math.max(1,+this.value||30))"></label>
+      <label class="field full">Сетевая папка с документами<input type="text" value="${esc(s.share)}" onchange="setSetting('share',this.value.trim())"></label>
+      <label class="field">Синхронизация, каждые N минут<input type="number" min="5" max="1440" value="${s.syncMinutes}" onchange="setSetting('syncMinutes',Math.max(5,+this.value||60))"></label>
+    </div>
+    <div class="spacer"></div><h3>Логотип</h3><p class="sub">PNG, SVG или JPG, до 500 КБ, лучше с прозрачным фоном.</p>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><div class="logo">${s.logo?`<img src="${esc(s.logo)}" alt="">`:DEFAULT_LOGO}</div>
+    <input type="file" accept="image/png,image/svg+xml,image/jpeg" onchange="uploadLogo(this)">${s.logo?'<button class="btn btn-sm" onclick="setSetting(\'logo\',\'\')">Вернуть стандартный</button>':''}</div>
+  </div><div>
+    <h3>ИИ-помощник</h3><p class="sub">Используется только локальная модель на сервере предприятия. Без адреса модели помощник работает в упрощенном режиме: понимает типовые вопросы о статусах, разделах, ответственных и месяцах.</p>
+    <div class="form-grid">
+      <label class="field full">Адрес локальной модели (Ollama)<input type="text" value="${esc(s.ollamaUrl)}" placeholder="http://ai-server.pnhz.kz:11434" onchange="setSetting('ollamaUrl',this.value.trim())"></label>
+      <label class="field full">Название модели<input type="text" value="${esc(s.ollamaModel)}" placeholder="модель с поддержкой русского языка" onchange="setSetting('ollamaModel',this.value.trim())"></label>
+    </div>
+    <p class="muted small">На сервере Ollama разрешите запросы с адреса сайта (переменная OLLAMA_ORIGINS).</p>
+    <div class="spacer"></div><h3>Демо-данные</h3><p class="sub">Сбрасывает все изменения, сделанные в этом браузере.</p>
+    <button class="btn btn-danger" onclick="resetDemo()">Сбросить демо-данные</button>
+  </div></div>`;
+}
+function setSetting(k,v){audit('Настройки',k+': «'+(k==='logo'?(v?'загружен':'стандартный'):S.settings[k])+'» → «'+(k==='logo'?'':v)+'»');S.settings[k]=v;save();renderAll()}
+function uploadLogo(inp){const f=inp.files[0];if(!f)return;if(f.size>500*1024)return toast('Файл больше 500 КБ');const r=new FileReader();r.onload=()=>{setSetting('logo',r.result);toast('Логотип обновлен')};r.readAsDataURL(f)}
+function resetDemo(){if(!confirm('Сбросить все демо-данные?'))return;const sess=S.session;S=seed();S.session=sess;save();F={q:'',section:'',resp:'',status:'',month:''};renderAll();toast('Демо-данные восстановлены')}
+
+/* ====== Выгрузка в Excel (.xlsx) ====== */
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(u){let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CRC[(c^u[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function zip(files,type){
+  const enc=new TextEncoder();const parts=[],central=[];let off=0;
+  files.forEach(f=>{const name=enc.encode(f.name),data=enc.encode(f.data),crc=crc32(data);
+    const lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(8,0,true);lh.setUint16(10,0,true);lh.setUint16(12,0x21,true);
+    lh.setUint32(14,crc,true);lh.setUint32(18,data.length,true);lh.setUint32(22,data.length,true);lh.setUint16(26,name.length,true);lh.setUint16(28,0,true);
+    parts.push(new Uint8Array(lh.buffer),name,data);
+    const ch=new DataView(new ArrayBuffer(46));
+    ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(10,0,true);ch.setUint16(12,0,true);ch.setUint16(14,0x21,true);
+    ch.setUint32(16,crc,true);ch.setUint32(20,data.length,true);ch.setUint32(24,data.length,true);ch.setUint16(28,name.length,true);
+    ch.setUint16(30,0,true);ch.setUint16(32,0,true);ch.setUint16(34,0,true);ch.setUint16(36,0,true);ch.setUint32(38,0,true);ch.setUint32(42,off,true);
+    central.push(new Uint8Array(ch.buffer),name);off+=30+name.length+data.length;});
+  const size=central.reduce((a,b)=>a+b.length,0);
+  const end=new DataView(new ArrayBuffer(22));end.setUint32(0,0x06054b50,true);end.setUint16(8,files.length,true);end.setUint16(10,files.length,true);end.setUint32(12,size,true);end.setUint32(16,off,true);
+  return new Blob([...parts,...central,new Uint8Array(end.buffer)],{type});
+}
+function colL(n){let s='';n++;while(n>0){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26)}return s}
+function plainVal(d,c,i){
+  switch(c.key){case 'num':return i+1;case 'section':return d.secName;case 'sectionResp':return d.respObj.name;case 'developer':return d.devObj.name;case 'email':return d.respObj.email;
+    case 'effective':case 'expiry':case 'cancelled':return fmt(d[c.key]);case 'left':return d.left??'';case 'overdue':return d.over??'';case 'status':return stLabel(d.status);
+    default:if(c.key.startsWith('cf_')){const v=(d.custom||{})[c.key]||'';return c.type==='date'?fmt(v):v}return d[c.key]??'';}
+}
+function filterText(){const p=[];if(F.q)p.push('поиск «'+F.q+'»');if(F.section)p.push('раздел «'+sec(F.section).name+'»');if(F.resp)p.push('ответственный '+emp(F.resp).name);if(F.status)p.push('статус «'+stLabel(F.status)+'»');if(F.month)p.push('окончание в '+F.month);return p.length?p.join(', '):'без фильтров'}
+function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}
+function exportXlsx(){
+  const a=list();const cols=S.columns.filter(c=>c.visible!==false);const c=counts(a);const n=cols.length;const last=colL(n-1);
+  const W={num:5,code:14,title:52,section:24,sectionResp:20,developer:20,email:26,effective:13,expiry:13,cancelled:13,left:10,overdue:10,status:16,file:60,note:30};
+  const stStyle={overdue:5,expiring:7,active:8,cancelled:9,draft:10};
+  const txt=(r,v,s)=>`<c r="${r}" s="${s}" t="inlineStr"><is><t xml:space="preserve">${xe(v)}</t></is></c>`;
+  const num=(r,v,s)=>v===''||v==null?txt(r,'',s):`<c r="${r}" s="${s}"><v>${v}</v></c>`;
+  let rows='';
+  rows+=`<row r="1" ht="22" customHeight="1">${txt('A1','Отчет об актуальности внутренних документов предприятия',1)}</row>`;
+  rows+=`<row r="2">${txt('A2',(S.settings.company?S.settings.company+'. ':'')+'Сформирован: '+fmtTs(Date.now())+', пользователь: '+userName(),0)}</row>`;
+  rows+=`<row r="3">${txt('A3',`Всего: ${a.length}; действуют: ${c.active}; истекают: ${c.expiring}; просрочены: ${c.overdue}; отменены: ${c.cancelled}; требуют заполнения: ${c.draft}; актуальность: ${pct(c)}%`,11)}</row>`;
+  rows+=`<row r="4">${txt('A4','Фильтры: '+filterText(),0)}</row>`;
+  rows+=`<row r="5" ht="32" customHeight="1">${cols.map((col,j)=>txt(colL(j)+'5',col.label,2)).join('')}</row>`;
+  a.forEach((d,i)=>{const r=i+6;const base=d.status==='overdue'?4:3;
+    rows+=`<row r="${r}">`+cols.map((col,j)=>{const ref=colL(j)+r;const v=plainVal(d,col,i);
+      if(col.key==='overdue')return num(ref,v,d.over?5:base);
+      if(col.key==='status')return txt(ref,v,stStyle[d.status]);
+      if(col.key==='num'||col.key==='left'||(col.type==='number'&&v!==''))return num(ref,v,base);
+      return txt(ref,v,base);}).join('')+'</row>';});
+  const lastRow=Math.max(6,a.length+5);
+  const sheet=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><dimension ref="A1:${last}${lastRow}"/><sheetViews><sheetView workbookViewId="0"><pane ySplit="5" topLeftCell="A6" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols>${cols.map((col,j)=>`<col min="${j+1}" max="${j+1}" width="${W[col.key]||18}" customWidth="1"/>`).join('')}</cols><sheetData>${rows}</sheetData><autoFilter ref="A5:${last}${lastRow}"/><mergeCells count="4"><mergeCell ref="A1:${last}1"/><mergeCell ref="A2:${last}2"/><mergeCell ref="A3:${last}3"/><mergeCell ref="A4:${last}4"/></mergeCells><pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/><pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>`;
+  const b='<border><left style="thin"><color rgb="FFD0D7DD"/></left><right style="thin"><color rgb="FFD0D7DD"/></right><top style="thin"><color rgb="FFD0D7DD"/></top><bottom style="thin"><color rgb="FFD0D7DD"/></bottom><diagonal/></border>';
+  const fill=c=>`<fill><patternFill patternType="solid"><fgColor rgb="FF${c}"/><bgColor indexed="64"/></patternFill></fill>`;
+  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+<fonts count="4"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFD32F2F"/><name val="Calibri"/></font><font><b/><sz val="14"/><color rgb="FF1F5F7E"/><name val="Calibri"/></font></fonts>
+<fills count="8"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>${fill('E4EEF3')}${fill('FDECEA')}${fill('FFF4E5')}${fill('E8F5E9')}${fill('F1F1F1')}${fill('E8F0FA')}</fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>${b}</borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="12">
+<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
+<xf numFmtId="0" fontId="3" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment wrapText="1" vertical="center"/></xf>
+<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>
+<xf numFmtId="0" fontId="0" fillId="3" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>
+<xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top"/></xf>
+<xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1"/>
+<xf numFmtId="0" fontId="1" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top"/></xf>
+<xf numFmtId="0" fontId="1" fillId="5" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top"/></xf>
+<xf numFmtId="0" fontId="1" fillId="6" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top"/></xf>
+<xf numFmtId="0" fontId="1" fillId="7" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top"/></xf>
+<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  const files=[
+    {name:'[Content_Types].xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'},
+    {name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+    {name:'xl/workbook.xml',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Отчет" sheetId="1" r:id="rId1"/></sheets><definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">'Отчет'!$A$5:$${last}$${lastRow}</definedName></definedNames></workbook>`},
+    {name:'xl/_rels/workbook.xml.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'},
+    {name:'xl/styles.xml',data:styles},
+    {name:'xl/worksheets/sheet1.xml',data:sheet}
+  ];
+  download(zip(files,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),`Отчет_актуальность_ВД_${todayISO()}.xlsx`);
+  audit('Выгрузка','Excel, документов: '+a.length);save();if(isAdmin()&&adminTab==='audit')renderAdmin();
+  toast('Отчет выгружен в Excel');
+}
+
+/* ====== Выгрузка в PDF (печать) ====== */
+function exportPdf(){
+  const a=list();const cols=S.columns.filter(c=>c.visible!==false&&c.key!=='file');const c=counts(a);
+  $('printArea').innerHTML=`<div class="p-head">${S.settings.logo?`<img src="${esc(S.settings.logo)}" alt="">`:DEFAULT_LOGO}<div><div>${esc(S.settings.company)}</div><h1>Отчет об актуальности внутренних документов предприятия</h1></div></div>
+  <div class="p-meta">Сформирован: ${fmtTs(Date.now())}, пользователь: ${esc(userName())}. Фильтры: ${esc(filterText())}.</div>
+  <div class="p-sum"><span>Всего: <b>${a.length}</b></span><span>Действуют: <b>${c.active}</b></span><span>Истекают: <b>${c.expiring}</b></span><span>Просрочены: <b class="od" style="color:#D32F2F">${c.overdue}</b></span><span>Отменены: <b>${c.cancelled}</b></span><span>Актуальность: <b>${pct(c)}%</b></span></div>
+  <table class="p-tbl"><thead><tr>${cols.map(col=>`<th>${esc(col.label)}</th>`).join('')}</tr></thead><tbody>
+  ${a.map((d,i)=>`<tr class="${d.status==='overdue'?'over':''}">${cols.map(col=>{const v=plainVal(d,col,i);return `<td class="${col.key==='overdue'&&d.over?'od':''}">${esc(v)}</td>`}).join('')}</tr>`).join('')}
+  </tbody></table>`;
+  audit('Выгрузка','PDF, документов: '+a.length);save();
+  toast('В окне печати выберите «Сохранить как PDF»');
+  setTimeout(()=>window.print(),300);
+}
+
+/* ====== ИИ-помощник ====== */
+function toggleChat(open){
+  $('chat').classList.toggle('open',open);$('chatBtn').style.display=open?'none':'';
+  if(open){if(!CHAT.length)botSay(`Здравствуйте! Я помогу найти документы и сориентироваться на сайте. Спросите, например, какие документы просрочены, что истекает в ${MON_P[(new Date().getMonth()+1)%12]} или за что отвечает конкретный сотрудник.`);renderChat();setTimeout(()=>$('chatIn').focus(),50)}
+}
+function renderChat(){
+  $('chatMode').textContent=S.settings.ollamaUrl?'Локальная модель: '+(S.settings.ollamaModel||'не указана'):'Упрощенный режим, без подключения модели';
+  $('chatMsgs').innerHTML=CHAT.map(m=>`<div class="msg ${m.who}">${m.html}</div>`).join('');
+  $('chatMsgs').scrollTop=$('chatMsgs').scrollHeight;
+  const nm=MON_P[(new Date().getMonth()+1)%12];
+  const sg=['Какие документы просрочены?','Что истекает в '+nm+'?','Документы по охране труда','Выгрузить отчет в Excel'];
+  $('chatSugg').innerHTML=sg.map(s=>`<button onclick="chatSend(${esc(JSON.stringify(s))})">${esc(s)}</button>`).join('');
+}
+function botSay(html){CHAT.push({who:'bot',html});renderChat()}
+async function chatSend(text){
+  const inp=$('chatIn');text=(text??inp.value).trim();if(!text)return;inp.value='';
+  CHAT.push({who:'me',html:esc(text)});CHAT.push({who:'bot',html:'<span class="typing">Ищу ответ…</span>',tmp:true});renderChat();
+  let html;
+  if(S.settings.ollamaUrl){
+    try{html=await llmAsk(text)}catch(e){html=`<span class="muted small">Локальная модель недоступна (${esc(e.message)}). Отвечаю в упрощенном режиме.</span><br>`+agent(text)}
+  }else html=agent(text);
+  CHAT=CHAT.filter(m=>!m.tmp);botSay(html);
+}
+function hit(t,stem){return new RegExp('(^|[^а-яёa-z])'+stem.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i').test(t)}
+function docListHtml(a,max=5){if(!a.length)return '';return '<ul>'+a.slice(0,max).map(d=>`<li><button class="btn-link" onclick="openCard('${d.id}')">${esc(d.code)}</button> ${esc(d.title)}${d.over?` <span class="od">${d.over} дн.</span>`:d.left!=null?` <span class="muted">${fmt(d.expiry)}</span>`:''}</li>`).join('')+'</ul>'+(a.length>max?`<span class="muted small">и еще ${a.length-max}, полный список в реестре.</span>`:'')}
+function agent(text){
+  const t=text.toLowerCase().replace(/ё/g,'е');
+  if(/что ты умеешь|помощ|как пользоват|справк|^привет|здравств/.test(t))
+    return `Я умею:<ul><li>показывать документы по статусу: просроченные, истекающие, отмененные;</li><li>фильтровать по разделу, ответственному и месяцу окончания;</li><li>открывать карточку по шифру, например «открой ${esc(S.docs[0].code)}»;</li><li>выгружать отчет в Excel или PDF;</li><li>переходить к дашборду или списку ответственных.</li></ul>Изменять данные может только администратор.`;
+  if(/(добав|удал|измен|исправ|редакт)/.test(t)&&/(документ|запис|столб)/.test(t)){
+    if(!isAdmin())return 'Изменять реестр может только администратор (Васькина Т.Г.). Я могу показать нужные документы или выгрузить отчет.';
+    if(/добав/.test(t)&&/документ/.test(t)){editDoc();return 'Открыл форму добавления документа.'}
+    if(/столб/.test(t)){adminTab='form';renderAdmin();$('admin').scrollIntoView({behavior:reduced()?'auto':'smooth'});return 'Открыл настройки формы отчета.'}
+    return 'Откройте карточку документа и нажмите «Изменить» или «Удалить». Назовите шифр, и я открою карточку.';
+  }
+  if(/сброс|очист|все документы|весь реестр|покажи все/.test(t)){resetFilters(true);return 'Фильтры сброшены, показан весь реестр.'}
+  if(/excel|эксел|ексел|xlsx|таблиц/.test(t)&&/(выгруз|скача|сохран|экспорт|отчет|excel|эксел)/.test(t)){exportXlsx();return 'Выгружаю отчет в Excel с учетом текущих фильтров.'}
+  if(/(pdf|пдф)/.test(t)&&/(выгруз|скача|сохран|экспорт|отчет|печат)/.test(t)){exportPdf();return 'Открываю печать отчета. Выберите «Сохранить как PDF».'}
+  const all=E();
+  const byCode=all.find(d=>t.includes(d.code.toLowerCase()));
+  if(byCode){openCard(byCode.id);return `Открыл карточку ${esc(byCode.code)}: ${esc(byCode.title)}. Статус: ${esc(stLabel(byCode.status))}${byCode.over?`, просрочка <span class="od">${byCode.over} дн.</span>`:''}.`}
+  const f={};
+  if(/просроч/.test(t))f.status='overdue';
+  else if(/истека|истечет|истекут|заканчива|скоро|приближ/.test(t))f.status='expiring';
+  else if(/отмен/.test(t))f.status='cancelled';
+  else if(/заполн|провер|уточня/.test(t))f.status='draft';
+  else if(/действующ|действуют|актуальн(ые|ых)/.test(t))f.status='active';
+  let best=null,bs=0;
+  S.sections.forEach(s=>{const stems=(s.aliases||[]).concat(s.name.toLowerCase().split(/\s+/).filter(w=>w.length>3).map(w=>w.slice(0,5)));const sc=stems.filter(x=>hit(t,x)).length;if(sc>bs){bs=sc;best=s}});
+  if(best)f.section=best.id;
+  const person=S.emp.find(e=>{const sn=e.name.split(' ')[0].toLowerCase();return hit(t,sn.length>4?sn.slice(0,sn.length-2):sn)});
+  if(person)f.resp=person.id;
+  const mre=[/январ/,/феврал/,/март/,/апрел/,/(^|[^а-я])ма[йяе]([^а-я]|$)/,/июн/,/июл/,/август/,/сентябр/,/октябр/,/ноябр/,/декабр/];
+  const now=new Date();let mi=mre.findIndex(r=>r.test(t));let my=now.getFullYear();
+  if(/этом месяце|текущем месяце/.test(t))mi=now.getMonth();
+  if(/следующем месяце/.test(t)){mi=(now.getMonth()+1)%12;if(mi===0)my++}
+  else if(mi>=0&&mi<now.getMonth())my++;
+  const ym=t.match(/20\d\d/);if(ym&&mi>=0)my=+ym[0];
+  if(mi>=0){f.month=my+'-'+pad(mi+1);if(f.status==='expiring')delete f.status}
+  if(!Object.keys(f).length){
+    if(/дашборд|диаграм|график|аналит|статистик/.test(t)){$('dashboard').scrollIntoView({behavior:reduced()?'auto':'smooth'});return 'Перешел к дашборду со сроками и диаграммами.'}
+    if(/ответствен/.test(t)){$('responsible').scrollIntoView({behavior:reduced()?'auto':'smooth'});return 'Показал список ответственных за разделы.'}
+    if(/сколько|всего/.test(t)){const c=counts(all);return `Всего в реестре ${all.length} ${plural(all.length,'документ','документа','документов')}: действуют ${c.active}, истекают ${c.expiring}, просрочены <span class="od">${c.overdue}</span>, отменены ${c.cancelled}, требуют заполнения ${c.draft}. Актуальность ${pct(c)}%.`}
+    return 'Не нашел, что показать по этому запросу. Попробуйте: «просроченные документы», «что истекает в декабре», «документы Ахметовой» или «открой '+esc(S.docs[0].code)+'».';
+  }
+  setFilters(f,true);
+  const res=list();
+  const desc=[];
+  if(f.status)desc.push({overdue:'просроченные',expiring:'истекающие в ближайшие '+S.settings.warnDays+' дней',cancelled:'отмененные',draft:'требующие заполнения',active:'действующие'}[f.status]);
+  if(f.section)desc.push('раздел «'+esc(sec(f.section).name)+'»');
+  if(f.resp)desc.push('ответственный '+esc(emp(f.resp).name));
+  if(f.month)desc.push('окончание в '+MON_P[mi]+' '+my);
+  if(!res.length)return `По условиям (${desc.join(', ')}) документов нет. Фильтр применен в реестре.`;
+  return `Найдено ${res.length} ${plural(res.length,'документ','документа','документов')} (${desc.join(', ')}). Применил фильтр в реестре.`+docListHtml(res);
+}
+async function llmAsk(text){
+  const url=S.settings.ollamaUrl.replace(/\/$/,'')+'/api/chat';
+  const data=E().map(d=>({id:d.id,code:d.code,title:d.title,section:d.section,resp:d.respObj.name,respId:d.respObj.id,developer:d.devObj.name,status:d.status,expiry:d.expiry,daysOverdue:d.over,daysLeft:d.left}));
+  const sys=`Ты — ИИ-помощник сайта «Отчет об актуальности внутренних документов предприятия». Сегодня ${fmt(todayISO())}. Роль пользователя: ${isAdmin()?'администратор':'читатель'}. Отвечай кратко, по-русски и только на основании данных ниже. Если данных нет, так и скажи. Через тебя нельзя изменять данные.
+Разделы: ${JSON.stringify(S.sections.map(s=>({id:s.id,name:s.name})))}
+Сотрудники: ${JSON.stringify(S.emp.map(e=>({id:e.id,name:e.name})))}
+Реестр: ${JSON.stringify(data)}
+Верни строго JSON: {"answer":"текст","filters":{"status":"","section":"","resp":"","month":"","q":""},"action":"none"}. status: overdue|expiring|active|cancelled|draft или пусто; section и resp — id; month — ГГГГ-ММ; action: none|export_xlsx|export_pdf|dashboard|reset|open:<id документа>.`;
+  const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),30000);
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,body:JSON.stringify({model:S.settings.ollamaModel,stream:false,format:'json',messages:[{role:'system',content:sys},{role:'user',content:text}]})});
+  clearTimeout(to);
+  if(!r.ok)throw new Error('ответ сервера '+r.status);
+  const j=await r.json();const o=JSON.parse(j.message.content);
+  const fl=o.filters||{};const f={};
+  if(ST[fl.status])f.status=fl.status;if(S.sections.some(s=>s.id===fl.section))f.section=fl.section;if(S.emp.some(e=>e.id===fl.resp))f.resp=fl.resp;if(/^\d{4}-\d{2}$/.test(fl.month||''))f.month=fl.month;if(fl.q)f.q=String(fl.q);
+  const act=String(o.action||'none');
+  if(Object.keys(f).length)setFilters(f,true);
+  if(act==='export_xlsx')exportXlsx();else if(act==='export_pdf')exportPdf();else if(act==='reset')resetFilters(true);
+  else if(act==='dashboard')$('dashboard').scrollIntoView({behavior:'smooth'});else if(act.startsWith('open:')){const id=act.slice(5);if(S.docs.some(d=>d.id===id))openCard(id)}
+  return esc(o.answer||'Ответ не получен.')+(Object.keys(f).length?'<br><span class="muted small">Фильтр применен в реестре.</span>':'');
+}
+
+/* ====== Общий рендер ====== */
+function renderAll(){renderHeader();renderKPI();renderTimeline();renderCharts();renderFilters();renderRegistry();renderResp();renderAdmin();if($('chat').classList.contains('open'))renderChat()}
+load();renderAll();
+</script>
+</body>
+</html>
